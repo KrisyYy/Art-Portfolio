@@ -69,3 +69,18 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+.title-margin {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.card-columns {
+@include media-breakpoint-only(lg) {
+    column-count: 4;
+}
+
+@include media-breakpoint-only(xl) {
+    column-count: 5;
+}
+}

@@ -53,14 +53,14 @@ namespace ArtPortfolio
                 .UseEndpoints(endpoints =>
                 {
                     endpoints.MapControllerRoute(
-                        name: "art",
-                        pattern: "artworks/id={string id}",
-                        defaults: new { controller = "Artworks", action = "Art"});
-
-                    endpoints.MapControllerRoute(
                         name: "create",
                         pattern: "create",
                         defaults: new { controller = "Artworks", action = "Create" });
+
+                    endpoints.MapControllerRoute(
+                        name: "library",
+                        pattern: "library",
+                        defaults: new { controller = "Artworks", action = "All" });
 
                     endpoints.MapControllerRoute(
                     name: "default",

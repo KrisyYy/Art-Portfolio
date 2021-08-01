@@ -1,0 +1,22 @@
+﻿@model List<ArtListingViewModel>
+@{
+    ViewData["Title"] = "All";
+}
+
+<p>TODO: implement sorting and filtering</p>
+<div class="card-columns">
+    @foreach (var art in Model)
+        {
+            <div class="card">
+                <img class="card-img-top" src="@art.ImageUrl" alt="@art.Title">
+                <div class="card-body text-center">
+                    <h5 class="card-title">@art.Title</h5>
+                </div>
+                <div class="card-body">
+                    <a asp-controller="Artworks" asp-action="Art" asp-route-id="@art.Id" class="card-link">Info</a>
+                    <a asp-controller="Artworks" asp-action="Like" asp-route-id="@art.Id" class="card-link">Like @art.Likes</a>
+                </div>
+            </div>
+        }
+</div>
+

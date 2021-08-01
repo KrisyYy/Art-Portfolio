@@ -1,8 +1,23 @@
-﻿@model ArtPortfolio.Models.Artworks.ArtViewModel
-
+﻿@model ArtViewModel
 @{
     ViewData["Title"] = "Art";
 }
 
-<h1>Art</h1>
 
+
+<div class="row">
+    <div class="offset-lg-2 col-lg-8 offset-md-1 col-md-10 col-sm-12">
+        <div class="card">
+            <img class="card-img-top" src="@Model.ImageUrl" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">@Model.Title</h5>
+                <p class="card-text">@Model.Description</p>
+            </div>
+            <div class="card-body">
+                <a asp-controller="Artworks" asp-action="Like" asp-route-id="@Model.Id" class="card-link">Like @Model.Likes</a>
+                <a href="#" class="card-link">Views @Model.Views</a>
+                <a href="#" class="card-link float-right">Edit</a>
+            </div>
+        </div>
+    </div>
+</div>

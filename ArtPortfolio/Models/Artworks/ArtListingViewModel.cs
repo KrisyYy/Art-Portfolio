@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using ArtPortfolio.Models.Comments;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ArtPortfolio.Models.Artworks
 {
-    public class ArtViewModel
+    public class ArtListingViewModel
     {
         public string Id { get; set; }
 
@@ -12,12 +13,7 @@ namespace ArtPortfolio.Models.Artworks
 
         public string Title { get; set; }
 
-        public string Description { get; set; }
-
-        public int Views { get; set; }
-
         public int Likes { get; set; }
 
-        //public IEnumerable<CommentViewModel> Comments { get; set; }
     }
 }
