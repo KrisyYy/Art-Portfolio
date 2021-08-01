@@ -1,5 +1,6 @@
 using ArtPortfolio.Data;
 using ArtPortfolio.Middleware;
+using ArtPortfolio.Services.Artworks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -21,14 +22,20 @@ namespace ArtPortfolio
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ArtPortfolioDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDatabaseDeveloperPageExceptionFilter();
+            services
+                .AddDbContext<ArtPortfolioDbContext>(options => options
+                    .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services
+                .AddDatabaseDeveloperPageExceptionFilter();
+
+            services
+                .AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ArtPortfolioDbContext>();
+
             services.AddControllersWithViews();
+
+            services.AddTransient<IArtworkService, ArtworkService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

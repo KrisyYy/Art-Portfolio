@@ -1,26 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using ArtPortfolio.Data;
 using ArtPortfolio.Data.Models;
 using ArtPortfolio.Models.Artworks;
+using ArtPortfolio.Services.Artworks;
 
 namespace ArtPortfolio.Controllers
 {
     public class ArtworksController : Controller
     {
-        private ArtPortfolioDbContext data;
+        private readonly IArtworkService artworkService;
 
-        public ArtworksController(ArtPortfolioDbContext data)
+        public ArtworksController(IArtworkService artworkService)
         {
-            this.data = data;
+            this.artworkService = artworkService;
         }
 
         public IActionResult Art(string id)
         {
-            var artwork = this.data.Artworks.FirstOrDefault(a => a.Id == id);
+            var artwork = artworkService.GetArtworkById(id);
             if (artwork == null)
             {
                 return NotFound();
@@ -42,7 +40,9 @@ namespace ArtPortfolio.Controllers
 
         public IActionResult All()
         {
-            var selection = this.data.Artworks
+            var data = artworkService.GetListOfArtworks();
+
+            var selection = data
                 .OrderByDescending(a => a.Likes)
                 .Select(a => new ArtListingViewModel()
                 {
@@ -70,29 +70,19 @@ namespace ArtPortfolio.Controllers
                 return View(artModel);
             }
 
-            var artwork = new Artwork()
-            {
-                Title = artModel.Title,
-                Description = artModel.Description,
-                ImageUrl = artModel.ImageUrl
-            };
+            var id = artworkService.CreateArtwork(artModel);
 
-            this.data.Artworks.Add(artwork);
-            this.data.SaveChanges();
-
-            return Redirect($"Artworks/Art/{artwork.Id}");
+            return Redirect($"Artworks/Art/{id}");
         }
 
         public IActionResult Like(string id)
         {
-            var artwork = this.data.Artworks.FirstOrDefault(a => a.Id == id);
+            var artwork = artworkService.GetArtworkById(id);
             if (artwork == null)
             {
                 return NotFound();
             }
-
-            artwork.Likes++;
-            this.data.SaveChanges();
+            artworkService.Like(artwork);
 
             return RedirectToAction("Art", "Artworks", new {id = artwork.Id});
         }

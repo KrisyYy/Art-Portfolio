@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ArtPortfolio.Models.Commission;
+using ArtPortfolio.Models.Commissions;
 
 namespace ArtPortfolio.Controllers
 {
-    public class CommissionController : Controller
+    public class CommissionsController : Controller
     {
         public IActionResult Info()
         {
