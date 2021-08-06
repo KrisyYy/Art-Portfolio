@@ -1,17 +1,16 @@
 ﻿@model ListOfArtworksServiceModel
 @inject IArtistService ArtistService
+@{
+    var currentAction = this.ViewContext.RouteData.Values["action"].ToString();
+}
 
-<div class="card">
+<div class="square-img-container">
     <a asp-controller="Artworks" asp-action="Art" asp-route-id="@Model.Id" class="card-link">
-        <img class="card-img-top square-image" src="@Model.ImageUrl" alt="@Model.Title">
+        <img class="square-img" src="@Model.ImageUrl" alt="@Model.Title">
     </a>
-    <div class="card-body text-center">
-        <h5 class="card-title">@Model.Title</h5>
-    </div>
     <div class="card-body">
-        <a asp-controller="Artworks" asp-action="Like" asp-route-id="@Model.Id" class="card-link">Likes @Model.Likes</a>
-        <a asp-controller="Artworks" asp-action="Art" asp-route-id="@Model.Id" class="card-link">Edit</a>
-        @if (Model.ArtistId != ArtistService.GetIdByUser(this.User.GetId()))
+        <h5 class="card-title">@Model.Title</h5>
+        @if (currentAction != "MyArtworks")
         {
             <p class="card-text"><small class="text-muted">By @ArtistService.GetName(Model.ArtistId)</small></p>
         }

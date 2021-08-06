@@ -12,6 +12,8 @@ namespace ArtPortfolio.Data.Models
         [MaxLength(NameMaxLen)]
         public string Name { get; set; }
 
+        public string AvatarUrl { get; set; } = "https://i.imgur.com/rtrF2Ih.jpg";
+
         [Required]
         [MaxLength(DescriptionMaxLen)]
         public string Description { get; set; }

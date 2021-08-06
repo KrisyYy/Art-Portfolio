@@ -3,14 +3,15 @@
     ViewData["Title"] = "My Artworks";
 }
 
-<h1>My Artworks</h1>
+<h1 class="title-margin">My Artworks</h1>
 @if (!Model.Any())
 {
-    <p>no artworks yet</p>
+    <p>No artworks yet</p>
 }
-<div class="card-columns">
+<div class="row">
     @foreach (var art in Model)
     {
         <partial name="ArtPartial" model="@art" />
     }
 </div>
+

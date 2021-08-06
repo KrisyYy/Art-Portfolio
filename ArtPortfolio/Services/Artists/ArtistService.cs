@@ -1,34 +1,31 @@
 ﻿using System.Linq;
 using ArtPortfolio.Data;
 using ArtPortfolio.Data.Models;
-using Microsoft.AspNetCore.Identity;
 
 namespace ArtPortfolio.Services.Artists
 {
     public class ArtistService : IArtistService
     {
-        private readonly ArtPortfolioDbContext data;
-        private readonly UserManager<User> userManager;
+        private readonly ArtPortfolioDbContext _data;
 
-        public ArtistService(ArtPortfolioDbContext data, UserManager<User> userManager)
+        public ArtistService(ArtPortfolioDbContext data)
         {
-            this.data = data;
-            this.userManager = userManager;
+            _data = data;
         }
 
         public bool IsArtist(string id)
         {
-            return this.data.Artists.Any(a => a.UserId == id);
+            return _data.Artists.Any(a => a.UserId == id);
         }
 
         public int GetIdByUser(string id)
         {
-            return this.data.Artists.Where(a => a.UserId == id).Select(a => a.Id).FirstOrDefault();
+            return _data.Artists.Where(a => a.UserId == id).Select(a => a.Id).FirstOrDefault();
         }
 
         public string GetName(int id)
         {
-            return this.data.Artists.Where(a => a.Id == id).Select(a => a.Name).FirstOrDefault();
+            return _data.Artists.Where(a => a.Id == id).Select(a => a.Name).FirstOrDefault();
         }
 
         public int CreateArtist(string name, string description, string userId)
@@ -40,21 +37,58 @@ namespace ArtPortfolio.Services.Artists
                 UserId = userId
             };
 
-            this.data.Artists.Add(artist);
-            this.data.SaveChanges();
+            _data.Artists.Add(artist);
+            _data.SaveChanges();
 
             return artist.Id;
         }
 
         public Artist GetArtist(int id)
         {
-            return this.data.Artists.FirstOrDefault(a => a.Id == id);
+            return _data.Artists.FirstOrDefault(a => a.Id == id);
         }
 
         public void Follow(int id)
         {
-            this.GetArtist(id).Followers++;
-            this.data.SaveChanges();
+            GetArtist(id).Followers++;
+            _data.SaveChanges();
+        }
+
+        public int ChangeAvatar(string userId, string avatarUrl)
+        {
+            var artistId = GetIdByUser(userId);
+            GetArtist(artistId).AvatarUrl = avatarUrl;
+            _data.SaveChanges();
+
+            return artistId;
+        }
+
+        public int ChangeName(string userId, string name)
+        {
+            var artistId = GetIdByUser(userId);
+            GetArtist(artistId).Name = name;
+            _data.SaveChanges();
+
+            return artistId;
+        }
+
+        public int ChangeDescription(string userId, string description)
+        {
+            var artistId = GetIdByUser(userId);
+            GetArtist(artistId).Description = description;
+            _data.SaveChanges();
+
+            return artistId;
+        }
+
+        public int ToggleAvailable(string userId)
+        {
+            var artistId = GetIdByUser(userId);
+            var artist = GetArtist(artistId);
+            artist.AvailableToCommission = !artist.AvailableToCommission;
+            _data.SaveChanges();
+
+            return artistId;
         }
     }
 }

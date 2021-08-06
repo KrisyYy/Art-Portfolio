@@ -16,10 +16,10 @@
             <div class="card-body">
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <a asp-controller="Artworks" asp-action="Like" asp-route-id="@Model.Id" class="card-link">Like @Model.Likes</a>
+                    <a asp-controller="Artworks" asp-action="Like" asp-route-id="@Model.Id" class="card-link">Like</a>
+                    <a asp-controller="Artworks" asp-action="Like" asp-route-id="@Model.Id" class="card-link">Edit</a>
                 }
-                <a href="#" class="card-link">Views @Model.Views</a>
-                <a href="#" class="card-link float-right">Edit</a>
+                <p class="card-text"><small class="text-muted">Likes - @Model.Likes</small><small class="text-muted" style="float: right">Views - @Model.Views</small></p>
             </div>
         </div>
     </div>

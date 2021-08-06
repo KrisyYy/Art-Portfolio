@@ -9,8 +9,7 @@ namespace ArtPortfolio.Models.Artworks
         [MaxLength(ArtTitleMaxLen, ErrorMessage = "Title field must be longer than {0}")]
         [MinLength(ArtTitleMinLen, ErrorMessage = "Title field must be shorter than {0}")]
         public string Title { get; set; }
-
-        [Required]
+        
         [MaxLength(DescriptionMaxLen, ErrorMessage = "Description field must be longer than {0}")]
         [MinLength(DescriptionMinLen, ErrorMessage = "Description field must be shorter than {0}")]
         public string Description { get; set; }

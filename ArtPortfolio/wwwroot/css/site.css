@@ -75,19 +75,26 @@ body {
     margin-bottom: 20px;
 }
 
-.square-image {
+.square-img-container {
+    margin: 10px;
+}
+
+.square-img {
     margin-top: 15px;
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 325px;
-    height: 325px;
+    width: 250px;
+    height: 250px;
     object-fit: cover;
+    border-radius: 15px;
 }
 
 .avatar {
-    width: 200px;
-    height: 200px;
+    margin-top: 20px;
+    margin-left: 10px;
+    width: 100px;
+    height: 100px;
     object-fit: cover;
     border-radius: 50%;
 }

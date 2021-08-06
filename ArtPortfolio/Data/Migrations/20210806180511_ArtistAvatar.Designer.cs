@@ -4,14 +4,16 @@ using ArtPortfolio.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ArtPortfolio.Data.Migrations
 {
     [DbContext(typeof(ArtPortfolioDbContext))]
-    partial class ArtPortfolioDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210806180511_ArtistAvatar")]
+    partial class ArtistAvatar
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

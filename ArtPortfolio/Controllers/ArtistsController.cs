@@ -57,6 +57,7 @@ namespace ArtPortfolio.Controllers
             var artistData = new ArtistProfileViewModel()
             {
                 Name = currentArtist.Name,
+                AvatarUrl = currentArtist.AvatarUrl,
                 AvailableToCommission = currentArtist.AvailableToCommission,
                 Description = currentArtist.Description,
                 Followers = currentArtist.Followers
@@ -71,6 +72,63 @@ namespace ArtPortfolio.Controllers
             _artistService.Follow(id);
 
             return RedirectToAction("Profile", "Artists", new {id = id});
+        }
+
+        [Authorize]
+        public IActionResult Settings()
+        {
+            var userId = this.User.GetId();
+            var artist = _artistService.GetArtist(_artistService.GetIdByUser(userId));
+
+            var data = new SettingsFormModel()
+            {
+                Name = artist.Name,
+                AvatarUrl = artist.AvatarUrl,
+                Description = artist.Description,
+                AvailableToCommission = artist.AvailableToCommission
+            };
+
+            return View(data);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult ChangeAvatar(string avatarUrl)
+        {
+            var userId = this.User.GetId();
+            var artistId = _artistService.ChangeAvatar(userId, avatarUrl);
+
+            return RedirectToAction("Profile", "Artists", new { id = artistId });
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult ChangeName(string name)
+        {
+            var userId = this.User.GetId();
+            var artistId = _artistService.ChangeName(userId, name);
+
+            return RedirectToAction("Profile", "Artists", new { id = artistId });
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult ChangeDescription(string description)
+        {
+            var userId = this.User.GetId();
+            var artistId = _artistService.ChangeDescription(userId, description);
+
+            return RedirectToAction("Profile", "Artists", new { id = artistId });
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult ToggleAvailable()
+        {
+            var userId = this.User.GetId();
+            var artistId = _artistService.ToggleAvailable(userId);
+
+            return RedirectToAction("Profile", "Artists", new { id = artistId });
         }
     }
 }

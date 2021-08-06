@@ -10,5 +10,10 @@ namespace ArtPortfolio.Services.Artists
         int CreateArtist(string name, string description, string userId);
         Artist GetArtist(int id);
         void Follow(int id);
+        int ChangeAvatar(string userId, string avatarUrl);
+        int ChangeName(string userId, string name);
+        int ChangeDescription(string userId, string description);
+        int ToggleAvailable(string userId);
+
     }
 }
