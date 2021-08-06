@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using ArtPortfolio.Data;
 using ArtPortfolio.Data.Models;
-using ArtPortfolio.Models.Artworks;
+using ArtPortfolio.Services.Artworks.Models;
 
 namespace ArtPortfolio.Services.Artworks
 {
@@ -17,18 +15,27 @@ namespace ArtPortfolio.Services.Artworks
             this.data = data;
         }
 
-        public Artwork GetArtworkById(string id)
+        public ArtworkServiceModel GetArtworkById(int id)
         {
-            var artwork = this.data.Artworks.FirstOrDefault(a => a.Id == id);
-            return artwork;
+            return this.data.Artworks.Where(a => a.Id == id)
+                .Select(a => new ArtworkServiceModel()
+                {
+                    Id = a.Id,
+                    Title = a.Title,
+                    ImageUrl = a.ImageUrl,
+                    Description = a.Description,
+                    Likes = a.Likes,
+                    Views = a.Views
+                }).FirstOrDefault();
         }
-        public string CreateArtwork(ArtCreateModel artModel)
+        public int CreateArtwork(string title, string description, string imageUrl, int artistId)
         {
             var artwork = new Artwork()
             {
-                Title = artModel.Title,
-                Description = artModel.Description,
-                ImageUrl = artModel.ImageUrl
+                Title = title,
+                Description = description,
+                ImageUrl = imageUrl,
+                ArtistId = artistId
             };
 
             this.data.Artworks.Add(artwork);
@@ -37,14 +44,27 @@ namespace ArtPortfolio.Services.Artworks
             return artwork.Id;
         }
 
-        public List<Artwork> GetListOfArtworks()
+        public List<ListOfArtworksServiceModel> GetListOfArtworks()
         {
-            return this.data.Artworks.ToList();
+            return this.data.Artworks.Select(a => new ListOfArtworksServiceModel()
+            {
+                Id = a.Id,
+                ImageUrl = a.ImageUrl,
+                Likes = a.Likes,
+                Title = a.Title,
+                ArtistId = a.ArtistId
+            }).ToList();
         }
 
-        public void Like(Artwork artwork)
+        public void Like(int id)
         {
-            artwork.Likes++;
+            this.GetArtworkById(id).Likes++;
+            this.data.SaveChanges();
+        }
+
+        public void View(int id)
+        {
+            this.GetArtworkById(id).Views++;
             this.data.SaveChanges();
         }
     }

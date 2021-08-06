@@ -7,9 +7,7 @@ namespace ArtPortfolio.Data.Models
 {
     public class Commission
     {
-        [Key]
-        [Required]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public int Id { get; init; }
 
         [MaxLength(DescriptionMaxLen)]
         public string NoteFromClient { get; set; }
@@ -17,7 +15,8 @@ namespace ArtPortfolio.Data.Models
         [Required]
         public CommissionType CommissionType { get; set; }
 
-        public bool HasScenery { get; set; }
+        [Required]
+        public SceneryType SceneryType { get; set; }
 
         public bool IsPrivate { get; set; }
 
@@ -25,14 +24,12 @@ namespace ArtPortfolio.Data.Models
 
         public DateTime? Deadline { get; set; }
 
-        //public decimal Price { get; set; }
+        public decimal Price { get; set; }
 
-        //public string ClientId { get; set; }
+        public int ArtistId { get; init; }
 
-        //public User Client { get; set; }
+        public Artist Artist { get; init; }
 
-        //public string ArtistId { get; set; }
-
-        //public User Artist { get; set; }
+        public bool IsComplete { get; set; } = false;
     }
 }

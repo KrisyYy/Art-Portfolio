@@ -1,4 +1,4 @@
-﻿@model ArtViewModel
+﻿@model ArtworkServiceModel
 @{
     ViewData["Title"] = "Art";
 }
@@ -14,7 +14,10 @@
                 <p class="card-text">@Model.Description</p>
             </div>
             <div class="card-body">
-                <a asp-controller="Artworks" asp-action="Like" asp-route-id="@Model.Id" class="card-link">Like @Model.Likes</a>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a asp-controller="Artworks" asp-action="Like" asp-route-id="@Model.Id" class="card-link">Like @Model.Likes</a>
+                }
                 <a href="#" class="card-link">Views @Model.Views</a>
                 <a href="#" class="card-link float-right">Edit</a>
             </div>

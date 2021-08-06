@@ -2,7 +2,7 @@
 {
     public enum CommissionType
     {
-        Avatar = 1,
+        Emote = 1,
         Chibi = 2,
         HalfBody = 3,
         FullBody = 4,

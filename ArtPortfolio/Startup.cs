@@ -1,9 +1,11 @@
 using ArtPortfolio.Data;
-using ArtPortfolio.Middleware;
+using ArtPortfolio.Data.Models;
+using ArtPortfolio.Extensions;
+using ArtPortfolio.Services.Artists;
 using ArtPortfolio.Services.Artworks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,12 +32,22 @@ namespace ArtPortfolio
                 .AddDatabaseDeveloperPageExceptionFilter();
 
             services
-                .AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddDefaultIdentity<User>(options =>
+                {
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                })
                 .AddEntityFrameworkStores<ArtPortfolioDbContext>();
 
-            services.AddControllersWithViews();
+            services.AddAutoMapper(typeof(Startup));
 
-            services.AddTransient<IArtworkService, ArtworkService>();
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+            });
+
+            services.AddTransient<IArtworkService, ArtworkService>()
+                .AddTransient<IArtistService, ArtistService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

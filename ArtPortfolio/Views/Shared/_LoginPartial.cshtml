@@ -1,13 +1,25 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@inject IArtistService ArtistService
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
+    var userId = User.GetId();
+    var isArtist = ArtistService.IsArtist(userId);
     <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
+        <a class="nav-link text-dark" asp-area=""  asp-controller="Artists" asp-action="Profile" asp-route-id="@ArtistService.GetIdByUser(this.User.GetId())">@(isArtist ? ArtistService.GetName(ArtistService.GetIdByUser(userId)) : User.Identity.Name)</a>
     </li>
+    @if (isArtist)
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Artworks" asp-action="MyArtworks" asp-route-id="@ArtistService.GetIdByUser(this.User.GetId())">Artworks</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Commissions" asp-action="MyCommissions" asp-route-id="@ArtistService.GetIdByUser(this.User.GetId())">Commissions</a>
+        </li>
+    }
     <li class="nav-item">
         <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
             <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>

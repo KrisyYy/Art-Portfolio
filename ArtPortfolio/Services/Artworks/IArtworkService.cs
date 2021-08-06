@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ArtPortfolio.Data.Models;
-using ArtPortfolio.Models.Artworks;
+﻿using System.Collections.Generic;
+using ArtPortfolio.Services.Artworks.Models;
 
 namespace ArtPortfolio.Services.Artworks
 {
     public interface IArtworkService
     {
-        public Artwork GetArtworkById(string id);
+        ArtworkServiceModel GetArtworkById(int id);
 
-        public string CreateArtwork(ArtCreateModel artModel);
+        int CreateArtwork(string title, string description, string imageUrl, int artistId);
 
-        public List<Artwork> GetListOfArtworks();
+        List<ListOfArtworksServiceModel> GetListOfArtworks();
 
-        public void Like(Artwork artwork);
+        void Like(int id);
+
+        void View(int id);
     }
 }

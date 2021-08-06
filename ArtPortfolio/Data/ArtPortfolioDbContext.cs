@@ -1,11 +1,10 @@
 ﻿using ArtPortfolio.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using ArtPortfolio.Models.Artworks;
 
 namespace ArtPortfolio.Data
 {
-    public class ArtPortfolioDbContext : IdentityDbContext
+    public class ArtPortfolioDbContext : IdentityDbContext<User>
     {
         public ArtPortfolioDbContext(DbContextOptions<ArtPortfolioDbContext> options)
             : base(options)
@@ -15,7 +14,50 @@ namespace ArtPortfolio.Data
         public DbSet<Artwork> Artworks { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Commission> Commissions { get; set; }
-        public DbSet<ArtPortfolio.Models.Artworks.ArtViewModel> ArtViewModel { get; set; }
+        public  DbSet<Artist> Artists { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Commission>()
+                .Property(p => p.Price)
+                .HasColumnType("decimal(18,4)");
+
+                builder
+                    .Entity<Artist>()
+                    .HasOne<User>()
+                    .WithOne()
+                    .HasForeignKey<Artist>(a => a.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                builder
+                    .Entity<Artwork>()
+                    .HasOne(a => a.Artist)
+                    .WithMany(a => a.Artworks)
+                    .HasForeignKey(a => a.ArtistId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                builder
+                    .Entity<Comment>()
+                    .HasOne(c => c.Artwork)
+                    .WithMany(a => a.Comments)
+                    .HasForeignKey(c => c.ArtworkId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                builder
+                    .Entity<Comment>()
+                    .HasOne(c => c.User)
+                    .WithMany(u => u.Comments)
+                    .HasForeignKey(c => c.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                    .Entity<Commission>()
+                    .HasOne(c => c.Artist)
+                    .WithMany(a => a.Commissions)
+                    .HasForeignKey(c => c.ArtistId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+            base.OnModelCreating(builder);
+        }
     }
 }

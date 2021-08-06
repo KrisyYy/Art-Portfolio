@@ -1,90 +1,92 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Linq;
-using ArtPortfolio.Data.Models;
+using ArtPortfolio.Extensions;
 using ArtPortfolio.Models.Artworks;
+using ArtPortfolio.Services.Artists;
 using ArtPortfolio.Services.Artworks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ArtPortfolio.Controllers
 {
     public class ArtworksController : Controller
     {
-        private readonly IArtworkService artworkService;
+        private readonly IArtworkService _artworkService;
+        private readonly IArtistService _artistService;
 
-        public ArtworksController(IArtworkService artworkService)
+        public ArtworksController(IArtworkService artworkService, IArtistService artistService)
         {
-            this.artworkService = artworkService;
+            _artworkService = artworkService;
+            _artistService = artistService;
         }
 
-        public IActionResult Art(string id)
+        public IActionResult Art(int id)
         {
-            var artwork = artworkService.GetArtworkById(id);
+            var artwork = _artworkService.GetArtworkById(id);
             if (artwork == null)
             {
                 return NotFound();
             }
 
-            var artData = new ArtViewModel()
-            {
-                Id = artwork.Id,
-                Title = artwork.Title,
-                ImageUrl = artwork.ImageUrl,
-                Description = artwork.Description,
-                Likes = artwork.Likes,
-                Views = artwork.Views
-            };
+            _artworkService.View(id);
 
-            return View(artData);
+            return View(artwork);
         }
 
 
         public IActionResult All()
         {
-            var data = artworkService.GetListOfArtworks();
+            var data = _artworkService.GetListOfArtworks()
+                .OrderByDescending(a => a.Likes).ToList();
 
-            var selection = data
-                .OrderByDescending(a => a.Likes)
-                .Select(a => new ArtListingViewModel()
-                {
-                    Id = a.Id,
-                    Title = a.Title,
-                    ImageUrl = a.ImageUrl,
-                    Likes = a.Likes
-                }).ToList();
+            return View(data);
+        }
 
+        [Authorize]
+        public IActionResult MyArtworks(int id)
+        {
+            var data = _artworkService.GetListOfArtworks()
+                .OrderByDescending(a => a.Id)
+                .Where(a => a.ArtistId == id).ToList();
 
-            return View(selection);
+            return View(data);
         }
 
 
+        [Authorize]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Create(ArtCreateModel artModel)
         {
+            var userId = this.User.GetId();
+            var artistId = _artistService.GetIdByUser(userId);
+
             if (!ModelState.IsValid)
             {
                 return View(artModel);
             }
 
-            var id = artworkService.CreateArtwork(artModel);
+            var artId = _artworkService.CreateArtwork
+            (
+                artModel.Title,
+                artModel.Description,
+                artModel.ImageUrl,
+                artistId
+            );
 
-            return Redirect($"Artworks/Art/{id}");
+            return RedirectToAction("Art", "Artworks", new {id = artId});
         }
 
-        public IActionResult Like(string id)
+        [Authorize]
+        public IActionResult Like(int id)
         {
-            var artwork = artworkService.GetArtworkById(id);
-            if (artwork == null)
-            {
-                return NotFound();
-            }
-            artworkService.Like(artwork);
+            _artworkService.Like(id);
 
-            return RedirectToAction("Art", "Artworks", new {id = artwork.Id});
+            return RedirectToAction("Art", "Artworks", new { id = id});
         }
 
     }

@@ -7,5 +7,7 @@
         public const int DescriptionMaxLen = 500;
         public const int DescriptionMinLen = 5;
         public const int CommentMaxLen = 100;
+        public const int NameMaxLen = 20;
+        public const int NameMinLen = 3;
     }
 }

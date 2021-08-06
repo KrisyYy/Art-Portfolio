@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ArtPortfolio.Models.Comments;
 
 namespace ArtPortfolio.Models.Artworks
 {
     public class ArtViewModel
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         public string ImageUrl { get; set; }
 
@@ -18,6 +17,6 @@ namespace ArtPortfolio.Models.Artworks
 
         public int Likes { get; set; }
 
-        //public IEnumerable<CommentViewModel> Comments { get; set; }
+        public IEnumerable<CommentViewModel> Comments { get; set; }
     }
 }

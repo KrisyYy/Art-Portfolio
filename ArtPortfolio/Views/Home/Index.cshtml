@@ -4,8 +4,8 @@
 }
 
 @{
-    var firstImage = Model[0];
-    var restOfImages = Model.Skip(1).ToList();
+    var firstImage = Model.Any() ? Model[0] : null;
+    var restOfImages = Model.Any() ? Model.Skip(1).ToList() : null;
 }
 
 <div class="text-center">

@@ -75,12 +75,19 @@ body {
     margin-bottom: 20px;
 }
 
-.card-columns {
-@include media-breakpoint-only(lg) {
-    column-count: 4;
+.square-image {
+    margin-top: 15px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 325px;
+    height: 325px;
+    object-fit: cover;
 }
 
-@include media-breakpoint-only(xl) {
-    column-count: 5;
-}
+.avatar {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
 }

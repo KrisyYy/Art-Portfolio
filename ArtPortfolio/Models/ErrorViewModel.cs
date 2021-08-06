@@ -1,5 +1,3 @@
-using System;
-
 namespace ArtPortfolio.Models
 {
     public class ErrorViewModel

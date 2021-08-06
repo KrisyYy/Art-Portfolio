@@ -1,10 +1,9 @@
 ﻿@model List<ListOfArtworksServiceModel>
-@inject IArtistService ArtistService
 @{
-    ViewData["Title"] = "All";
+    ViewData["Title"] = "My Artworks";
 }
 
-<p>TODO: implement sorting and filtering</p>
+<h1>My Artworks</h1>
 @if (!Model.Any())
 {
     <p>no artworks yet</p>

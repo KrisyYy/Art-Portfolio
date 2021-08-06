@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ArtPortfolio.Middleware
+namespace ArtPortfolio.Extensions
 {
-    public static class Extensions
+    public static class ApplicationBuilderExtension
     {
         public static IApplicationBuilder MigrateDatabase(this IApplicationBuilder app)
         {

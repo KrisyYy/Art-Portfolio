@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using static ArtPortfolio.Data.DataConstants;
 
 namespace ArtPortfolio.Data.Models
 {
     public class Comment
     {
-        [Key]
-        [Required]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public int Id { get; init; }
 
         [Required]
         [MaxLength(CommentMaxLen)]
@@ -17,10 +13,13 @@ namespace ArtPortfolio.Data.Models
 
         public int Likes { get; set; } = 0;
 
-        //public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+        public int ArtworkId { get; init; }
 
-        //public int AuthorId { get; set; }
+        public Artwork Artwork { get; init; }
 
-        //public User Author { get; set; }
+        [Required]
+        public string UserId { get; init; }
+
+        public User User { get; init; }
     }
 }
