@@ -1,0 +1,70 @@
+﻿@using ArtPortfolio.Data.Models.Enums
+@model CommissionRequestFormModel
+@{
+    ViewData["Title"] = "Commission";
+}
+
+<div class="row">
+    <div class="offset-lg-3 col-lg-6 offset-md-2 col-md-8 col-sm-12">
+        <h1 class="title-margin">Request a commission from @ViewBag.ArtistName</h1>
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="CommissionType">Commission Type</label>
+                <select class="form-control" asp-for="CommissionType">
+                    @foreach (int option in Enum.GetValues(typeof(CommissionType)))
+                    {
+                    <option value="@option">@((CommissionType)option)</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="SceneryType">Scenery Type</label>
+                <select class="form-control" asp-for="SceneryType">
+                    @foreach (int option in Enum.GetValues(typeof(SceneryType)))
+                    {
+                    <option value="@option">@((SceneryType)option)</option>
+                    }
+                </select>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" asp-for="IsForCommercialUse">
+                <label class="form-check-label" asp-for="IsForCommercialUse">Commercial Rights</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" asp-for="IsPrivate">
+                <label class="form-check-label" asp-for="IsPrivate">Private Commission</label>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="NoteFromClient">Note To Artist</label>
+                <textarea asp-for="NoteFromClient" class="form-control" placeholder="Anything you would like to express about your commission..." rows="3"></textarea>
+                <span asp-validation-for="NoteFromClient" class="small text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="ArtistId" value="@ViewBag.ArtistId"/>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+
+@{
+/*
+ <div class="form-group">
+<ul class="list-group">
+    <li class="list-group-item"></li>
+</ul>
+</div>
+@section Scripts {
+<script>
+    function addProp(){
+        var li = document.createElement("LI");
+        var input = document.getElementById("add");
+        li.innerHTML = input.value;
+        input.value = "";
+
+        document.getElementById("faves").appendChild(li);
+    }
+</script>
+}
+ */
+}

@@ -36,7 +36,9 @@ namespace ArtPortfolio.Controllers
         public IActionResult All()
         {
             var data = _artworkService.GetListOfArtworks()
-                .OrderByDescending(a => a.Likes).ToList();
+                .OrderByDescending(a => a.Likes)
+                .ThenByDescending(a => a.Id)
+                .ToList();
 
             return View(data);
         }

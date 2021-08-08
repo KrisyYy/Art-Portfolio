@@ -57,6 +57,13 @@ namespace ArtPortfolio.Data
                     .HasForeignKey(c => c.ArtistId)
                     .OnDelete(DeleteBehavior.Restrict);
 
+            builder
+                .Entity<Prop>()
+                .HasOne(p => p.Commission)
+                .WithMany(c => c.Props)
+                .HasForeignKey(p => p.CommissionId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(builder);
         }
     }

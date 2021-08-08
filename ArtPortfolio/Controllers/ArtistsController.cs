@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ArtPortfolio.Controllers
 {
+    [Authorize]
     public class ArtistsController : Controller
     {
         private readonly IArtistService _artistService;
@@ -14,15 +15,13 @@ namespace ArtPortfolio.Controllers
         {
             _artistService = artistService;
         }
-
-        [Authorize]
+        
         public IActionResult BecomeArtist()
         {
             return View();
         }
 
         [HttpPost]
-        [Authorize]
         public IActionResult BecomeArtist(BecomeArtistFormModel artistModel)
         {
             var currentUserId = this.User.GetId();
@@ -44,8 +43,7 @@ namespace ArtPortfolio.Controllers
 
             return RedirectToAction("MyArtworks", "Artworks", new {id = artistId});
         }
-
-        [Authorize]
+        
         public IActionResult Profile(int id)
         {
             var currentArtist = _artistService.GetArtist(id);
@@ -56,6 +54,7 @@ namespace ArtPortfolio.Controllers
 
             var artistData = new ArtistProfileViewModel()
             {
+                Id = currentArtist.Id,
                 Name = currentArtist.Name,
                 AvatarUrl = currentArtist.AvatarUrl,
                 AvailableToCommission = currentArtist.AvailableToCommission,
@@ -65,16 +64,14 @@ namespace ArtPortfolio.Controllers
 
             return View(artistData);
         }
-
-        [Authorize]
+        
         public IActionResult Follow(int id)
         {
             _artistService.Follow(id);
 
             return RedirectToAction("Profile", "Artists", new {id = id});
         }
-
-        [Authorize]
+        
         public IActionResult Settings()
         {
             var userId = this.User.GetId();
@@ -92,7 +89,6 @@ namespace ArtPortfolio.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public IActionResult ChangeAvatar(string avatarUrl)
         {
             var userId = this.User.GetId();
@@ -102,7 +98,6 @@ namespace ArtPortfolio.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public IActionResult ChangeName(string name)
         {
             var userId = this.User.GetId();
@@ -112,7 +107,6 @@ namespace ArtPortfolio.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public IActionResult ChangeDescription(string description)
         {
             var userId = this.User.GetId();
@@ -122,7 +116,6 @@ namespace ArtPortfolio.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public IActionResult ToggleAvailable()
         {
             var userId = this.User.GetId();

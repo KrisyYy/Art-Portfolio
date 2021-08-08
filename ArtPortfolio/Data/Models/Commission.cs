@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using ArtPortfolio.Data.Models.Enums;
 using static ArtPortfolio.Data.DataConstants;
@@ -22,7 +23,7 @@ namespace ArtPortfolio.Data.Models
 
         public bool IsForCommercialUse { get; set; }
 
-        public DateTime? Deadline { get; set; }
+        public ICollection<Prop> Props { get; set; } = new List<Prop>();
 
         public decimal Price { get; set; }
 

@@ -58,13 +58,13 @@ namespace ArtPortfolio.Services.Artworks
 
         public void Like(int id)
         {
-            this.GetArtworkById(id).Likes++;
+            this.data.Artworks.FirstOrDefault(a => a.Id == id).Likes++;
             this.data.SaveChanges();
         }
 
         public void View(int id)
         {
-            this.GetArtworkById(id).Views++;
+            this.data.Artworks.FirstOrDefault(a => a.Id == id).Views++;
             this.data.SaveChanges();
         }
     }

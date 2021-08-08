@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using static ArtPortfolio.Data.DataConstants;
 
 namespace ArtPortfolio.Data.Models
@@ -10,8 +11,6 @@ namespace ArtPortfolio.Data.Models
         [Required]
         [MaxLength(CommentMaxLen)]
         public string Content { get; set; }
-
-        public int Likes { get; set; } = 0;
 
         public int ArtworkId { get; init; }
 

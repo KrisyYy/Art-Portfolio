@@ -4,35 +4,41 @@
 @inject IArtistService ArtistService
 
 <ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    var userId = User.GetId();
-    var isArtist = ArtistService.IsArtist(userId);
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area=""  asp-controller="Artists" asp-action="Profile" asp-route-id="@ArtistService.GetIdByUser(this.User.GetId())">@(isArtist ? ArtistService.GetName(ArtistService.GetIdByUser(userId)) : User.Identity.Name)</a>
-    </li>
-    @if (isArtist)
+    @if (SignInManager.IsSignedIn(User))
     {
+        var userId = User.GetId();
+        var isArtist = ArtistService.IsArtist(userId);
+        @if (isArtist)
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Artists" asp-action="Profile" asp-route-id="@ArtistService.GetIdByUser(this.User.GetId())">@ArtistService.GetName(ArtistService.GetIdByUser(userId))</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Artworks" asp-action="MyArtworks" asp-route-id="@ArtistService.GetIdByUser(this.User.GetId())">Artworks</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Commissions" asp-action="MyCommissions" asp-route-id="@ArtistService.GetIdByUser(this.User.GetId())">Commissions</a>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Artists" asp-action="BecomeArtist">Become an Artist</a>
+            </li>
+        }
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Artworks" asp-action="MyArtworks" asp-route-id="@ArtistService.GetIdByUser(this.User.GetId())">Artworks</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Commissions" asp-action="MyCommissions" asp-route-id="@ArtistService.GetIdByUser(this.User.GetId())">Commissions</a>
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+            </form>
         </li>
     }
-    <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
-    </li>
-}
-else
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+    }
 </ul>

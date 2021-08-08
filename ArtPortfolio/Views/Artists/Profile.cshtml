@@ -1,15 +1,29 @@
 ﻿@model ArtistProfileViewModel
+@inject IArtistService ArtistService
 @{
     ViewData["Title"] = "Profile";
 }
 
 <div class="card col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-sm-12">
     <img class="card-img-top avatar" src="@Model.AvatarUrl" alt="avatar">
-    <a asp-controller="Artists" asp-action="Settings" role="button" class="btn btn-outline-info col-3 float-right">Settings</a>
     <div class="card-body">
+        @if (@Model.Id != ArtistService.GetIdByUser(this.User.GetId()))
+        {
+        <a asp-controller="Artists" asp-action="Follow" asp-route-id="@Model.Id" role="button" class="btn btn-outline-info col-2 float-right">Follow</a>
+        }
         <h5 class="card-title">@Model.Name</h5>
         <p class="card-text">@Model.Description</p>
         <p class="card-text"><small class="text-muted">Followers - @Model.Followers</small></p>
+        @if (@Model.Id == ArtistService.GetIdByUser(this.User.GetId()))
+        {
+            <a asp-controller="Artists" asp-action="Settings" role="button" class="btn btn-outline-info col-2 float-right">Settings</a>
+        }
         <p class="card-text"><small class="text-muted">Available to commission - @(Model.AvailableToCommission ? "Yes" : "No")</small></p>
+    </div>
+    <div class="card-body">
+        @if (@Model.Id != ArtistService.GetIdByUser(this.User.GetId()))
+        {
+            <a asp-controller="Commissions" asp-action="Commission" asp-route-id="@Model.Id" role="button" class="btn btn-outline-info col-5">Commission</a>
+        }
     </div>
 </div>

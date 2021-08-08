@@ -50,14 +50,14 @@ namespace ArtPortfolio.Services.Artists
 
         public void Follow(int id)
         {
-            GetArtist(id).Followers++;
+            _data.Artists.FirstOrDefault(a => a.Id == id).Followers++;
             _data.SaveChanges();
         }
 
         public int ChangeAvatar(string userId, string avatarUrl)
         {
             var artistId = GetIdByUser(userId);
-            GetArtist(artistId).AvatarUrl = avatarUrl;
+            _data.Artists.FirstOrDefault(a => a.Id == artistId).AvatarUrl = avatarUrl;
             _data.SaveChanges();
 
             return artistId;
@@ -66,7 +66,7 @@ namespace ArtPortfolio.Services.Artists
         public int ChangeName(string userId, string name)
         {
             var artistId = GetIdByUser(userId);
-            GetArtist(artistId).Name = name;
+            _data.Artists.FirstOrDefault(a => a.Id == artistId).Name = name;
             _data.SaveChanges();
 
             return artistId;
@@ -75,7 +75,7 @@ namespace ArtPortfolio.Services.Artists
         public int ChangeDescription(string userId, string description)
         {
             var artistId = GetIdByUser(userId);
-            GetArtist(artistId).Description = description;
+            _data.Artists.FirstOrDefault(a => a.Id == artistId).Description = description;
             _data.SaveChanges();
 
             return artistId;
@@ -84,7 +84,7 @@ namespace ArtPortfolio.Services.Artists
         public int ToggleAvailable(string userId)
         {
             var artistId = GetIdByUser(userId);
-            var artist = GetArtist(artistId);
+            var artist = _data.Artists.FirstOrDefault(a => a.Id == artistId);
             artist.AvailableToCommission = !artist.AvailableToCommission;
             _data.SaveChanges();
 
