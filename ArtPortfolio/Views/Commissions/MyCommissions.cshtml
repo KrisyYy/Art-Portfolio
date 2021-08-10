@@ -1,0 +1,25 @@
+﻿@model List<CommissionListingViewModel>
+@inject ICommissionService CommissionService
+@{
+    ViewData["Title"] = "MyCommissions";
+}
+
+<div class="row">
+    <div class="offset-lg-2 col-lg-8 offset-md-1 col-md-10 col-sm-12">
+        <h1 class="title-margin">My Commissions</h1>
+        <div class="container" id="active">
+            <h2 class="card-title">Active</h2>
+            @foreach (var comm in @Model.Where(c => !c.IsComplete))
+            {
+                <partial name="CommPartial" model="comm"/>
+            }
+        </div>
+        <div class="container" id="resolved">
+            <h2 class="card-title">Finished</h2>
+            @foreach (var comm in @Model.Where(c => c.IsComplete))
+            {
+                <partial name="CommPartial" model="comm" />
+            }
+        </div>
+    </div>
+</div>

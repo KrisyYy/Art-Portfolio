@@ -1,6 +1,6 @@
 ﻿namespace ArtPortfolio.Models.Artists
 {
-    public class ArtistProfileViewModel
+    public class ArtistViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -11,6 +11,8 @@
 
         public int Followers { get; set; }
 
-        public bool AvailableToCommission { get; set; } = false;
+        public bool IsFollowed { get; set; }
+
+        public bool AvailableToCommission { get; set; }
     }
 }

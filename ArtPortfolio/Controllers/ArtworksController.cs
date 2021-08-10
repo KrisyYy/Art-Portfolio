@@ -21,7 +21,7 @@ namespace ArtPortfolio.Controllers
 
         public IActionResult Art(int id)
         {
-            var artwork = _artworkService.GetArtworkById(id);
+            var artwork = _artworkService.GetArtworkById(id, this.User.GetId());
             if (artwork == null)
             {
                 return NotFound();
@@ -86,7 +86,7 @@ namespace ArtPortfolio.Controllers
         [Authorize]
         public IActionResult Like(int id)
         {
-            _artworkService.Like(id);
+            _artworkService.Like(id, this.User.GetId());
 
             return RedirectToAction("Art", "Artworks", new { id = id});
         }

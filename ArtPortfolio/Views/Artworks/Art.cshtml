@@ -1,4 +1,4 @@
-﻿@model ArtworkServiceModel
+﻿@model ArtViewModel
 @{
     ViewData["Title"] = "Art";
 }
@@ -16,10 +16,12 @@
             <div class="card-body">
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <a asp-controller="Artworks" asp-action="Like" asp-route-id="@Model.Id" class="card-link">Like</a>
-                    <a asp-controller="Artworks" asp-action="Like" asp-route-id="@Model.Id" class="card-link">Edit</a>
+                    <a asp-controller="Artworks" asp-action="Like" asp-route-id="@Model.Id" role="button" class="btn btn-outline-info @(Model.IsLiked ? "active" : "")" aria-pressed="@(Model.IsLiked ? "true" : "false")">Like@(Model.IsLiked ? "d" : "")</a>
                 }
                 <p class="card-text"><small class="text-muted">Likes - @Model.Likes</small><small class="text-muted" style="float: right">Views - @Model.Views</small></p>
+            </div>
+            <div class="card-body">
+                @*COMMENTS*@
             </div>
         </div>
     </div>

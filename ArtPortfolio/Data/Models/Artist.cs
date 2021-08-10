@@ -18,8 +18,6 @@ namespace ArtPortfolio.Data.Models
         [MaxLength(DescriptionMaxLen)]
         public string Description { get; set; }
 
-        public int Followers { get; set; } = 0;
-
         public bool AvailableToCommission { get; set; } = false;
 
         public ICollection<Commission> Commissions { get; set; } = new List<Commission>();
@@ -28,5 +26,7 @@ namespace ArtPortfolio.Data.Models
         public string UserId { get; set; }
 
         public ICollection<Artwork> Artworks { get; set; } = new List<Artwork>();
+
+        public ICollection<Follow> Follows { get; set; } = new List<Follow>();
     }
 }

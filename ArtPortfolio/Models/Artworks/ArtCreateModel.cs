@@ -6,8 +6,8 @@ namespace ArtPortfolio.Models.Artworks
     public class ArtCreateModel
     {
         [Required]
-        [MaxLength(ArtTitleMaxLen, ErrorMessage = "Title field must be longer than {0}")]
-        [MinLength(ArtTitleMinLen, ErrorMessage = "Title field must be shorter than {0}")]
+        [MaxLength(TitleMaxLen, ErrorMessage = "Title field must be longer than {0}")]
+        [MinLength(TitleMinLen, ErrorMessage = "Title field must be shorter than {0}")]
         public string Title { get; set; }
         
         [MaxLength(DescriptionMaxLen, ErrorMessage = "Description field must be longer than {0}")]

@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
-using ArtPortfolio.Services.Artworks.Models;
+using ArtPortfolio.Models.Artworks;
 
 namespace ArtPortfolio.Services.Artworks
 {
     public interface IArtworkService
     {
-        ArtworkServiceModel GetArtworkById(int id);
+        ArtViewModel GetArtworkById(int id, string userId);
 
         int CreateArtwork(string title, string description, string imageUrl, int artistId);
 
-        List<ListOfArtworksServiceModel> GetListOfArtworks();
+        List<ArtListingViewModel> GetListOfArtworks();
 
-        void Like(int id);
+        void Like(int id, string userId);
 
         void View(int id);
     }

@@ -41,41 +41,32 @@ namespace ArtPortfolio.Controllers
                 currentUserId
             );
 
-            return RedirectToAction("MyArtworks", "Artworks", new {id = artistId});
+            return RedirectToAction("Profile", "Artists", new {id = artistId});
         }
         
         public IActionResult Profile(int id)
         {
-            var currentArtist = _artistService.GetArtist(id);
-            if (currentArtist == null)
+            var artist = _artistService.GetArtistById(id, this.User.GetId());
+            if (artist == null)
             {
                 return BadRequest();
             }
 
-            var artistData = new ArtistProfileViewModel()
-            {
-                Id = currentArtist.Id,
-                Name = currentArtist.Name,
-                AvatarUrl = currentArtist.AvatarUrl,
-                AvailableToCommission = currentArtist.AvailableToCommission,
-                Description = currentArtist.Description,
-                Followers = currentArtist.Followers
-            };
-
-            return View(artistData);
+            return View(artist);
         }
         
         public IActionResult Follow(int id)
         {
-            _artistService.Follow(id);
+            _artistService.Follow(id, this.User.GetId());
 
             return RedirectToAction("Profile", "Artists", new {id = id});
         }
-        
+
         public IActionResult Settings()
         {
             var userId = this.User.GetId();
-            var artist = _artistService.GetArtist(_artistService.GetIdByUser(userId));
+            var artistId = _artistService.GetIdByUser(userId);
+            var artist = _artistService.GetArtistById(artistId, userId);
 
             var data = new SettingsFormModel()
             {

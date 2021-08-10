@@ -24,7 +24,16 @@ namespace ArtPortfolio.Controllers
         
         public IActionResult Info(int id)
         {
-            return View();
+            var data = _commissionService.GetCommission(id);
+            if (data == null)
+            {
+                return BadRequest();
+            }
+
+            var artistName = _artistService.GetName(data.ArtistId);
+            ViewBag.ArtistName = artistName;
+
+            return View(data);
         }
         
 
@@ -45,12 +54,14 @@ namespace ArtPortfolio.Controllers
             }
 
             var commId = _commissionService.Create(
+                requestModel.Title,
                 requestModel.NoteFromClient, 
                 requestModel.CommissionType, 
                 requestModel.SceneryType,
                 requestModel.IsPrivate, 
                 requestModel.IsForCommercialUse,
-                requestModel.ArtistId
+                requestModel.ArtistId,
+                requestModel.Price
             );
 
             if (requestModel.Props != null)
@@ -66,12 +77,21 @@ namespace ArtPortfolio.Controllers
                 }
             }
 
-            return RedirectToAction("Info", "Commissions", new {id = requestModel.ArtistId});
+            return RedirectToAction("Info", "Commissions", new {id = commId});
         }
 
         public IActionResult MyCommissions(int id)
         {
-            return View();
+            var data = _commissionService.GetListOfCommissions(id);
+
+            return View(data);
+        }
+
+        public IActionResult UpdateCommission(int id)
+        {
+            _commissionService.UpdateCommission(id);
+
+            return RedirectToAction("Info", "Commissions", new { id = id });
         }
     }
 }

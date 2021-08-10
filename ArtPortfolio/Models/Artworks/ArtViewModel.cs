@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ArtPortfolio.Models.Comments;
 
 namespace ArtPortfolio.Models.Artworks
 {
@@ -17,6 +16,8 @@ namespace ArtPortfolio.Models.Artworks
 
         public int Likes { get; set; }
 
-        public IEnumerable<CommentViewModel> Comments { get; set; }
+        public bool IsLiked { get; set; }
+
+        public List<CommentViewModel> Comments { get; set; }
     }
 }

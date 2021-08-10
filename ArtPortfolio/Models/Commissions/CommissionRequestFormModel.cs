@@ -9,6 +9,9 @@ namespace ArtPortfolio.Models.Commissions
     public class CommissionRequestFormModel
     {
         public int ArtistId { get; set; }
+        [Required]
+        [StringLength(TitleMaxLen, MinimumLength = TitleMinLen)]
+        public string Title { get; set; }
         public int CommissionType { get; set; }
 
         public int SceneryType { get; set; }

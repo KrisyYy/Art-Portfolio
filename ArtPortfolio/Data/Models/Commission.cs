@@ -10,6 +10,10 @@ namespace ArtPortfolio.Data.Models
     {
         public int Id { get; init; }
 
+        [Required]
+        [MaxLength(TitleMaxLen)]
+        public string Title { get; set; }
+
         [MaxLength(DescriptionMaxLen)]
         public string NoteFromClient { get; set; }
 
@@ -32,5 +36,7 @@ namespace ArtPortfolio.Data.Models
         public Artist Artist { get; init; }
 
         public bool IsComplete { get; set; } = false;
+
+        public Status Status { get; set; } = Status.Pending;
     }
 }

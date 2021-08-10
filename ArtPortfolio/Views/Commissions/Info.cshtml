@@ -1,0 +1,56 @@
+﻿@model CommissionInfoViewModel
+@inject IArtistService ArtistService
+@{
+    ViewData["Title"] = "Info";
+}
+
+
+<div class="row">
+    <div class="card col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-sm-12">
+        <div class="container">
+            <div class="card-body">
+                <h1 class="card-title">@Model.Title</h1>
+                <h4 class="card-subtitle text-muted">by @ViewBag.ArtistName</h4>
+                @if (Model.IsForCommercialUse)
+                {
+                    <span class="badge badge-secondary">Commercial</span>
+                }
+                @if (Model.IsPrivate)
+                {
+                    <span class="badge badge-secondary">Private</span>
+                }
+            </div>
+            <div class="container">
+                @if (ArtistService.GetIdByUser(this.User.GetId()) == Model.ArtistId && Model.Status < 5)
+                {
+                    <a asp-controller="Commissions" asp-action="UpdateCommission" asp-route-id="@Model.Id" role="button" class="btn btn-outline-info col-2 float-right">Update</a>
+                }
+                <h4><small class="card w-25 border-info text-center p-2">Status: @((Status) Model.Status)</small></h4>
+                <h3 class="card-title">Info</h3>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-subtitle">Commission type</h5>
+                        <p class="card-text">@((CommissionType) Model.CommissionType)</p>
+                        <h5 class="card-subtitle">Scenery type</h5>
+                        <p class="card-text">@((SceneryType) Model.SceneryType)</p>
+
+                        <h5 class="card-subtitle p-2">Note from Client</h5>
+                        <p class="card-text card p-2 col-8">@Model.NoteFromClient</p>
+                    </div>
+                    <div class="card-body">
+                        @foreach (var prop in Model.Props)
+                        {
+                            <div class="card card-body col-8">
+                                <h5 class="card-title">@prop.Name<small class="float-right badge badge-info">Quantity @prop.Quantity</small></h5>
+                                <p class="card-text">@prop.Description</p>
+                            </div>
+                        }
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Total price: @($"{Model.Price:00}") EUR.</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-﻿@model ArtistProfileViewModel
+﻿@model ArtistViewModel
 @inject IArtistService ArtistService
 @{
     ViewData["Title"] = "Profile";
@@ -9,7 +9,7 @@
     <div class="card-body">
         @if (@Model.Id != ArtistService.GetIdByUser(this.User.GetId()))
         {
-        <a asp-controller="Artists" asp-action="Follow" asp-route-id="@Model.Id" role="button" class="btn btn-outline-info col-2 float-right">Follow</a>
+        <a asp-controller="Artists" asp-action="Follow" asp-route-id="@Model.Id" role="button" aria-pressed="@(Model.IsFollowed ? "true" : "false")" class="btn btn-outline-info col-2 float-right @(Model.IsFollowed ? "active" : "")">Follow@(Model.IsFollowed ? "ing" : "")</a>
         }
         <h5 class="card-title">@Model.Name</h5>
         <p class="card-text">@Model.Description</p>
@@ -21,7 +21,7 @@
         <p class="card-text"><small class="text-muted">Available to commission - @(Model.AvailableToCommission ? "Yes" : "No")</small></p>
     </div>
     <div class="card-body">
-        @if (@Model.Id != ArtistService.GetIdByUser(this.User.GetId()))
+        @if (@Model.Id != ArtistService.GetIdByUser(this.User.GetId()) && Model.AvailableToCommission)
         {
             <a asp-controller="Commissions" asp-action="Commission" asp-route-id="@Model.Id" role="button" class="btn btn-outline-info col-5">Commission</a>
         }

@@ -4,14 +4,16 @@ using ArtPortfolio.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ArtPortfolio.Data.Migrations
 {
     [DbContext(typeof(ArtPortfolioDbContext))]
-    partial class ArtPortfolioDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210810162553_statusEnum")]
+    partial class statusEnum
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,6 +38,9 @@ namespace ArtPortfolio.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("Followers")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -71,6 +76,9 @@ namespace ArtPortfolio.Data.Migrations
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Likes")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -160,36 +168,6 @@ namespace ArtPortfolio.Data.Migrations
                     b.HasIndex("ArtistId");
 
                     b.ToTable("Commissions");
-                });
-
-            modelBuilder.Entity("ArtPortfolio.Data.Models.Follow", b =>
-                {
-                    b.Property<int>("ArtistId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ArtistId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Follows");
-                });
-
-            modelBuilder.Entity("ArtPortfolio.Data.Models.Like", b =>
-                {
-                    b.Property<int>("ArtworkId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ArtworkId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Likes");
                 });
 
             modelBuilder.Entity("ArtPortfolio.Data.Models.Prop", b =>
@@ -474,44 +452,6 @@ namespace ArtPortfolio.Data.Migrations
                     b.Navigation("Artist");
                 });
 
-            modelBuilder.Entity("ArtPortfolio.Data.Models.Follow", b =>
-                {
-                    b.HasOne("ArtPortfolio.Data.Models.Artist", "Artist")
-                        .WithMany("Follows")
-                        .HasForeignKey("ArtistId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ArtPortfolio.Data.Models.User", "User")
-                        .WithMany("Followed")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Artist");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ArtPortfolio.Data.Models.Like", b =>
-                {
-                    b.HasOne("ArtPortfolio.Data.Models.Artwork", "Artwork")
-                        .WithMany("Likes")
-                        .HasForeignKey("ArtworkId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ArtPortfolio.Data.Models.User", "User")
-                        .WithMany("Liked")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Artwork");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("ArtPortfolio.Data.Models.Prop", b =>
                 {
                     b.HasOne("ArtPortfolio.Data.Models.Commission", "Commission")
@@ -579,15 +519,11 @@ namespace ArtPortfolio.Data.Migrations
                     b.Navigation("Artworks");
 
                     b.Navigation("Commissions");
-
-                    b.Navigation("Follows");
                 });
 
             modelBuilder.Entity("ArtPortfolio.Data.Models.Artwork", b =>
                 {
                     b.Navigation("Comments");
-
-                    b.Navigation("Likes");
                 });
 
             modelBuilder.Entity("ArtPortfolio.Data.Models.Commission", b =>
@@ -598,10 +534,6 @@ namespace ArtPortfolio.Data.Migrations
             modelBuilder.Entity("ArtPortfolio.Data.Models.User", b =>
                 {
                     b.Navigation("Comments");
-
-                    b.Navigation("Followed");
-
-                    b.Navigation("Liked");
                 });
 #pragma warning restore 612, 618
         }

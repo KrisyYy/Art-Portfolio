@@ -4,29 +4,24 @@ using System.Diagnostics;
 using System.Linq;
 using ArtPortfolio.Data;
 using ArtPortfolio.Models.Artworks;
+using ArtPortfolio.Services.Artworks;
 
 namespace ArtPortfolio.Controllers
 {
     public class HomeController : Controller
     {
-        private ArtPortfolioDbContext data;
+        private readonly IArtworkService _artworkService;
 
-        public HomeController(ArtPortfolioDbContext data)
+        public HomeController(IArtworkService artworkService)
         {
-            this.data = data;
+            _artworkService = artworkService;
         }
 
         public IActionResult Index()
         {
-            var selection = this.data.Artworks
+            var selection = _artworkService.GetListOfArtworks()
                 .OrderByDescending(a => a.Likes)
-                .Select(a => new ArtListingViewModel()
-                {
-                    Id = a.Id,
-                    Title = a.Title,
-                    ImageUrl = a.ImageUrl,
-                    Likes = a.Likes
-                });
+                .ToList();
 
             var numberOfImages = selection.Count() <= 5 ? selection.Count() : 5;
 

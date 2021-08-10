@@ -9,6 +9,11 @@
         <form method="post">
             <div id="formBox">
                 <div class="form-group">
+                    <label asp-for="Title"></label>
+                    <input asp-for="Title" class="form-control" placeholder="Example title..">
+                    <span asp-validation-for="Title" class="small text-danger"></span>
+                </div>
+                <div class="form-group">
                     <label asp-for="CommissionType">Commission Type</label>
                     <select class="form-control" asp-for="CommissionType" id="commType">
                         @foreach (int option in Enum.GetValues(typeof(CommissionType)))
@@ -40,11 +45,11 @@
                     <textarea asp-for="NoteFromClient" class="form-control" placeholder="Anything you would like to express about your commission..." rows="3"></textarea>
                     <span asp-validation-for="NoteFromClient" class="small text-danger"></span>
                 </div>
-                <input type="hidden" asp-for="ArtistId" value="@ViewBag.ArtistId" />
+                <input type="hidden" asp-for="ArtistId" value="@ViewBag.ArtistId"/>
 
                 <div class="form-group">
                     <ul class="list-group" id="props">
-                        
+
                     </ul>
                     <br/>
                     <button type="button" class="btn btn-outline-info d-none" id="btnRemove">Remove prop</button>
@@ -56,7 +61,7 @@
             <div class="form-group d-none" id="priceBox">
                 <label class="m-3" asp-for="Price">Total price:</label>
                 <div class="input-group mb-3 col-4">
-                    <input asp-for="Price" class="form-control" value="" readonly> 
+                    <input asp-for="Price" class="form-control" readonly> 
                     <div class="input-group-append">
                         <span class="input-group-text"> EUR</span>
                     </div>

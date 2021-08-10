@@ -12,10 +12,12 @@ namespace ArtPortfolio.Data
         }
 
         public DbSet<Artwork> Artworks { get; set; }
-        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Artist> Artists { get; set; }
         public DbSet<Commission> Commissions { get; set; }
         public DbSet<Prop> Props { get; set; }
-        public  DbSet<Artist> Artists { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Follow> Follows { get; set; }
+        public DbSet<Like> Likes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -64,6 +66,40 @@ namespace ArtPortfolio.Data
                 .WithMany(c => c.Props)
                 .HasForeignKey(p => p.CommissionId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<Follow>()
+                .HasKey(f => new {f.ArtistId, f.UserId});
+            builder
+                .Entity<Follow>()
+                .HasOne(f => f.User)
+                .WithMany(u => u.Followed)
+                .HasForeignKey(f => f.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder
+                .Entity<Follow>()
+                .HasOne(f => f.Artist)
+                .WithMany(a => a.Follows)
+                .HasForeignKey(f => f.ArtistId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            builder
+                .Entity<Like>()
+                .HasKey(l => new {l.ArtworkId, l.UserId });
+            builder
+                .Entity<Like>()
+                .HasOne(l => l.User)
+                .WithMany(u => u.Liked)
+                .HasForeignKey(l => l.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder
+                .Entity<Like>()
+                .HasOne(l => l.Artwork)
+                .WithMany(a => a.Likes)
+                .HasForeignKey(l => l.ArtworkId)
+                .OnDelete(DeleteBehavior.Restrict);
+
 
             base.OnModelCreating(builder);
         }

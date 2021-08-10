@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using ArtPortfolio.Data;
 using ArtPortfolio.Data.Models;
+using ArtPortfolio.Models.Artists;
 
 namespace ArtPortfolio.Services.Artists
 {
@@ -43,14 +44,35 @@ namespace ArtPortfolio.Services.Artists
             return artist.Id;
         }
 
-        public Artist GetArtist(int id)
+        public ArtistViewModel GetArtistById(int id, string userId)
         {
-            return _data.Artists.FirstOrDefault(a => a.Id == id);
+            return _data.Artists.Where(a => a.Id == id).Select(a => new ArtistViewModel()
+            {
+                Id = a.Id,
+                Name = a.Name,
+                AvatarUrl = a.AvatarUrl,
+                AvailableToCommission = a.AvailableToCommission,
+                Description = a.Description,
+                Followers = a.Follows.Count,
+                IsFollowed = _data.Follows.Any(ar => ar.ArtistId == id && ar.UserId == userId)
+            }).First();
         }
 
-        public void Follow(int id)
+        public void Follow(int id, string userId)
         {
-            _data.Artists.FirstOrDefault(a => a.Id == id).Followers++;
+            var follow = _data.Follows.FirstOrDefault(f => f.UserId == userId && f.ArtistId == id);
+            if (follow != null)
+            {
+                _data.Follows.Remove(follow);
+                _data.SaveChanges();
+                return;
+            }
+            follow = new Follow()
+            {
+                ArtistId = id,
+                UserId = userId
+            };
+            _data.Follows.Add(follow);
             _data.SaveChanges();
         }
 

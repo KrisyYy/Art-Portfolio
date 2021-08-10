@@ -9,7 +9,7 @@ namespace ArtPortfolio.Data.Models
         public int Id { get; init; }
 
         [Required]
-        [MaxLength(ArtTitleMaxLen)]
+        [MaxLength(TitleMaxLen)]
         public string Title { get; set; }
 
         [MaxLength(DescriptionMaxLen)]
@@ -17,8 +17,8 @@ namespace ArtPortfolio.Data.Models
 
         [Required] 
         public string ImageUrl { get; set; }
-
-        public int Likes { get; set; } = 0;
+        
+        public ICollection<Like> Likes { get; set; } = new List<Like>();
 
         public int Views { get; set; } = 0;
 

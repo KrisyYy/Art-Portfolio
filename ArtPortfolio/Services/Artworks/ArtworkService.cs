@@ -2,30 +2,31 @@
 using System.Linq;
 using ArtPortfolio.Data;
 using ArtPortfolio.Data.Models;
-using ArtPortfolio.Services.Artworks.Models;
+using ArtPortfolio.Models.Artworks;
 
 namespace ArtPortfolio.Services.Artworks
 {
     public class ArtworkService : IArtworkService
     {
-        private ArtPortfolioDbContext data;
+        private readonly ArtPortfolioDbContext _data;
 
         public ArtworkService(ArtPortfolioDbContext data)
         {
-            this.data = data;
+            _data = data;
         }
 
-        public ArtworkServiceModel GetArtworkById(int id)
+        public ArtViewModel GetArtworkById(int id, string userId)
         {
-            return this.data.Artworks.Where(a => a.Id == id)
-                .Select(a => new ArtworkServiceModel()
+            return _data.Artworks.Where(a => a.Id == id)
+                .Select(a => new ArtViewModel()
                 {
                     Id = a.Id,
                     Title = a.Title,
                     ImageUrl = a.ImageUrl,
                     Description = a.Description,
-                    Likes = a.Likes,
-                    Views = a.Views
+                    Likes = a.Likes.Count,
+                    Views = a.Views,
+                    IsLiked = a.Likes.Any(l => l.UserId == userId && l.ArtworkId == id)
                 }).FirstOrDefault();
         }
         public int CreateArtwork(string title, string description, string imageUrl, int artistId)
@@ -38,34 +39,46 @@ namespace ArtPortfolio.Services.Artworks
                 ArtistId = artistId
             };
 
-            this.data.Artworks.Add(artwork);
-            this.data.SaveChanges();
+            _data.Artworks.Add(artwork);
+            _data.SaveChanges();
 
             return artwork.Id;
         }
 
-        public List<ListOfArtworksServiceModel> GetListOfArtworks()
+        public List<ArtListingViewModel> GetListOfArtworks()
         {
-            return this.data.Artworks.Select(a => new ListOfArtworksServiceModel()
+            return _data.Artworks.Select(a => new ArtListingViewModel()
             {
                 Id = a.Id,
                 ImageUrl = a.ImageUrl,
-                Likes = a.Likes,
+                Likes = a.Likes.Count,
                 Title = a.Title,
                 ArtistId = a.ArtistId
             }).ToList();
         }
 
-        public void Like(int id)
+        public void Like(int id, string userId)
         {
-            this.data.Artworks.FirstOrDefault(a => a.Id == id).Likes++;
-            this.data.SaveChanges();
+            var like = _data.Likes.FirstOrDefault(l => l.UserId == userId && l.ArtworkId == id);
+            if (like != null)
+            {
+                _data.Likes.Remove(like);
+                _data.SaveChanges();
+                return;
+            }
+            like = new Like()
+            {
+                ArtworkId = id,
+                UserId = userId
+            };
+            _data.Likes.Add(like);
+            _data.SaveChanges();
         }
 
         public void View(int id)
         {
-            this.data.Artworks.FirstOrDefault(a => a.Id == id).Views++;
-            this.data.SaveChanges();
+            _data.Artworks.FirstOrDefault(a => a.Id == id).Views++;
+            _data.SaveChanges();
         }
     }
 }
