@@ -1,29 +1,33 @@
 ﻿using System;
+using System.Collections.Generic;
 using ArtPortfolio.Data.Models;
 using ArtPortfolio.Data.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
 using ArtPortfolio.Models.Commissions;
 using ArtPortfolio.Services.Artists;
+using ArtPortfolio.Services.Commissions;
 using Microsoft.AspNetCore.Authorization;
 
 namespace ArtPortfolio.Controllers
 {
+    [Authorize]
     public class CommissionsController : Controller
     {
         private readonly IArtistService _artistService;
+        private readonly ICommissionService _commissionService;
 
-        public CommissionsController(IArtistService artistService)
+        public CommissionsController(IArtistService artistService, ICommissionService commissionService)
         {
             _artistService = artistService;
+            _commissionService = commissionService;
         }
-
-        [Authorize]
+        
         public IActionResult Info(int id)
         {
             return View();
         }
+        
 
-        [Authorize]
         public IActionResult Commission(int id)
         {
             var artistName = _artistService.GetName(id);
@@ -33,7 +37,6 @@ namespace ArtPortfolio.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public IActionResult Commission(CommissionRequestFormModel requestModel)
         {
             if (!ModelState.IsValid)
@@ -41,20 +44,31 @@ namespace ArtPortfolio.Controllers
                 return BadRequest();
             }
 
-            var commission = new Commission()
-            {
-                CommissionType = (CommissionType) requestModel.CommissionType,
-                SceneryType = (SceneryType) requestModel.SceneryType,
-                IsForCommercialUse = requestModel.IsForCommercialUse,
-                IsPrivate = requestModel.IsPrivate,
-                ArtistId = requestModel.ArtistId,
-                NoteFromClient = requestModel.NoteFromClient
-            };
+            var commId = _commissionService.Create(
+                requestModel.NoteFromClient, 
+                requestModel.CommissionType, 
+                requestModel.SceneryType,
+                requestModel.IsPrivate, 
+                requestModel.IsForCommercialUse,
+                requestModel.ArtistId
+            );
 
-            return RedirectToAction("Info", "Commissions", new {id = commission.Id});
+            if (requestModel.Props != null)
+            {
+                foreach (var prop in requestModel.Props)
+                {
+                    _commissionService.AddProp(
+                        prop.Name,
+                        prop.Quantity,
+                        prop.Description,
+                        commId
+                    );
+                }
+            }
+
+            return RedirectToAction("Info", "Commissions", new {id = requestModel.ArtistId});
         }
 
-        [Authorize]
         public IActionResult MyCommissions(int id)
         {
             return View();

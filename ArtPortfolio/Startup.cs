@@ -3,6 +3,7 @@ using ArtPortfolio.Data.Models;
 using ArtPortfolio.Extensions;
 using ArtPortfolio.Services.Artists;
 using ArtPortfolio.Services.Artworks;
+using ArtPortfolio.Services.Commissions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -47,7 +48,8 @@ namespace ArtPortfolio
             });
 
             services.AddTransient<IArtworkService, ArtworkService>()
-                .AddTransient<IArtistService, ArtistService>();
+                .AddTransient<IArtistService, ArtistService>()
+                .AddTransient<ICommissionService, CommissionService>(); ;
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

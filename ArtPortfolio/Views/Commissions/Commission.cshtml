@@ -1,5 +1,4 @@
-﻿@using ArtPortfolio.Data.Models.Enums
-@model CommissionRequestFormModel
+﻿@model CommissionRequestFormModel
 @{
     ViewData["Title"] = "Commission";
 }
@@ -8,63 +7,175 @@
     <div class="offset-lg-3 col-lg-6 offset-md-2 col-md-8 col-sm-12">
         <h1 class="title-margin">Request a commission from @ViewBag.ArtistName</h1>
         <form method="post">
-            <div class="form-group">
-                <label asp-for="CommissionType">Commission Type</label>
-                <select class="form-control" asp-for="CommissionType">
-                    @foreach (int option in Enum.GetValues(typeof(CommissionType)))
-                    {
-                    <option value="@option">@((CommissionType)option)</option>
-                    }
-                </select>
-            </div>
-            <div class="form-group">
-                <label asp-for="SceneryType">Scenery Type</label>
-                <select class="form-control" asp-for="SceneryType">
-                    @foreach (int option in Enum.GetValues(typeof(SceneryType)))
-                    {
-                    <option value="@option">@((SceneryType)option)</option>
-                    }
-                </select>
-            </div>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" asp-for="IsForCommercialUse">
-                <label class="form-check-label" asp-for="IsForCommercialUse">Commercial Rights</label>
-            </div>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" asp-for="IsPrivate">
-                <label class="form-check-label" asp-for="IsPrivate">Private Commission</label>
+            <div id="formBox">
+                <div class="form-group">
+                    <label asp-for="CommissionType">Commission Type</label>
+                    <select class="form-control" asp-for="CommissionType" id="commType">
+                        @foreach (int option in Enum.GetValues(typeof(CommissionType)))
+                        {
+                            <option value="@option">@((CommissionType) option)</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SceneryType">Scenery Type</label>
+                    <select class="form-control" asp-for="SceneryType" id="sceneryType">
+                        @foreach (int option in Enum.GetValues(typeof(SceneryType)))
+                        {
+                            <option value="@option">@((SceneryType) option)</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" asp-for="IsForCommercialUse" id="commercial">
+                    <label class="form-check-label" asp-for="IsForCommercialUse">Commercial Rights</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" asp-for="IsPrivate" id="private">
+                    <label class="form-check-label" asp-for="IsPrivate">Private Commission</label>
+                </div>
+                <br/>
+                <div class="form-group">
+                    <label asp-for="NoteFromClient">Note To Artist</label>
+                    <textarea asp-for="NoteFromClient" class="form-control" placeholder="Anything you would like to express about your commission..." rows="3"></textarea>
+                    <span asp-validation-for="NoteFromClient" class="small text-danger"></span>
+                </div>
+                <input type="hidden" asp-for="ArtistId" value="@ViewBag.ArtistId" />
+
+                <div class="form-group">
+                    <ul class="list-group" id="props">
+                        
+                    </ul>
+                    <br/>
+                    <button type="button" class="btn btn-outline-info d-none" id="btnRemove">Remove prop</button>
+                    <button type="button" class="btn btn-outline-info" id="btnAdd">Add prop</button>
+                </div>
+                <button type="button" class="btn btn-primary float-right" id="btnContinue">Continue</button>
             </div>
 
-            <div class="form-group">
-                <label asp-for="NoteFromClient">Note To Artist</label>
-                <textarea asp-for="NoteFromClient" class="form-control" placeholder="Anything you would like to express about your commission..." rows="3"></textarea>
-                <span asp-validation-for="NoteFromClient" class="small text-danger"></span>
+            <div class="form-group d-none" id="priceBox">
+                <label class="m-3" asp-for="Price">Total price:</label>
+                <div class="input-group mb-3 col-4">
+                    <input asp-for="Price" class="form-control" value="" readonly> 
+                    <div class="input-group-append">
+                        <span class="input-group-text"> EUR</span>
+                    </div>
+                </div>
             </div>
-            <input type="hidden" asp-for="ArtistId" value="@ViewBag.ArtistId"/>
-            <button type="submit" class="btn btn-primary">Submit</button>
+
+            <a type="button" class="btn btn-danger" asp-controller="Artists" asp-action="Profile" asp-route-id="@ViewBag.ArtistId">Cancel</a>
+            <button type="submit" class="btn btn-primary float-right d-none" id="btnSubmit">Submit</button>
         </form>
     </div>
 </div>
 
-
-@{
-/*
- <div class="form-group">
-<ul class="list-group">
-    <li class="list-group-item"></li>
+<ul id="prop-template" style="display:none;">
+    <li class="list-group-item">
+        <div class="form-row m-2">
+            <label class="col-2" asp-for="Props[0].Name">Name</label>
+            <div class="col-6">
+                <input asp-for="Props[0].Name" class="form-control form-control-sm name-class" placeholder="Plush, Weapon,..." value="">
+            </div>
+            <label class="col-2" asp-for="Props[0].Quantity">Quantity</label>
+            <div class="col-2">
+                <input asp-for="Props[0].Quantity" class="form-control form-control-sm quantity-class" placeholder="3.." value="">
+            </div>
+        </div>
+        <div class="form-row m-2">
+            <label class="col-3" asp-for="Props[0].Description">Description</label>
+            <div class="col-9">
+                <input asp-for="Props[0].Description" class="form-control form-control-sm description-class" placeholder="Describe it's characteristics here... (Optional)" value="">
+            </div>
+        </div>
+    </li>
 </ul>
-</div>
-@section Scripts {
-<script>
-    function addProp(){
-        var li = document.createElement("LI");
-        var input = document.getElementById("add");
-        li.innerHTML = input.value;
-        input.value = "";
 
-        document.getElementById("faves").appendChild(li);
-    }
-</script>
-}
- */
+@section Scripts {
+    <script>
+        $("#btnAdd").click(function(e) {
+            e.preventDefault();
+            var template = $("#prop-template").find(".list-group-item").first();
+            var counter = $("#props").find(".list-group-item").length;
+            var newRow = template.clone();
+            newRow.find("input.name-class")[0].setAttribute("name", ("Props[" + counter + "].Name"));
+            newRow.find("input.quantity-class")[0].setAttribute("name", ("Props[" + counter + "].Quantity"));
+            newRow.find("input.description-class")[0].setAttribute("name", ("Props[" + counter + "].Description"));
+
+            newRow.find("input.name-class")[0].id = "Props_" + counter +"__Name";
+            newRow.find("input.quantity-class")[0].id = "Props_" + counter + "__Quantity";
+            newRow.find("input.description-class")[0].id = "Props_" + counter + "__Description";
+
+            newRow.find(".form-control").val("");
+            $("#props").append(newRow);
+            if (counter >= 3) {
+                $("#btnAdd").addClass('d-none');
+            }
+            $("#btnRemove").removeClass('d-none');
+            
+        });
+
+        $("#btnRemove").click(function(e) {
+            e.preventDefault();
+            var propList = document.getElementById("props");
+            var lastChild = propList.lastElementChild;
+            if (lastChild != null) {
+                propList.removeChild(lastChild);
+            }
+            if (propList.childElementCount < 1) {
+                $("#btnRemove").addClass('d-none');
+            }
+            if (propList.childElementCount <= 3) {
+                $("#btnAdd").removeClass('d-none');
+            }
+        });
+
+        $("#btnContinue").click(function(e) {
+            e.preventDefault();
+
+            var commType = document.getElementById("commType").value;
+            var sceneryType = document.getElementById("sceneryType").value;
+            var commercial = document.getElementById("commercial").checked;
+            var private = document.getElementById("private").checked;
+            var quantity = 0;
+            var props = $("#props").find(".list-group-item");
+            var quantityProps = props.find("input.quantity-class");
+
+            var totalPrice = 0;
+
+            switch (commType) {
+                case '1': totalPrice += 10; break;
+                case '2': totalPrice += 30; break;
+                case '3': totalPrice += 70; break;
+                case '4': totalPrice += 100; break;
+                case '5': totalPrice += 500; break;
+                default: break;
+            }
+            switch (sceneryType) {
+                case '1': totalPrice += 0; break;
+                case '2': totalPrice += 10; break;
+                case '3': totalPrice += 50; break;
+                default: break;
+            }
+
+            $.each(quantityProps,
+                function (i, quantityProp) {
+                    quantity += parseInt(quantityProp.value);
+                });
+
+            totalPrice += quantity * 10;
+
+            if (commercial) {
+                totalPrice *= 2;
+            }
+            if (private) {
+                totalPrice *= 1.5;
+            }
+
+            document.getElementById("Price").value = totalPrice;
+
+            $("#formBox").addClass('d-none');
+            $("#priceBox").removeClass('d-none');
+            $("#btnSubmit").removeClass('d-none');
+        });
+    </script>
 }

@@ -17,9 +17,11 @@ namespace ArtPortfolio.Models.Commissions
 
         public bool IsForCommercialUse { get; set; }
 
-        public ICollection<PropFormModel> Props { get; set; }
+        public List<PropFormModel> Props { get; set; }
 
         [StringLength(DescriptionMaxLen, MinimumLength = DescriptionMinLen)]
         public string NoteFromClient { get; set; }
+
+        public decimal Price { get; set; }
     }
 }

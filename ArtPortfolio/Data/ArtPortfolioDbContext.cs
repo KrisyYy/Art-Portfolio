@@ -14,6 +14,7 @@ namespace ArtPortfolio.Data
         public DbSet<Artwork> Artworks { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Commission> Commissions { get; set; }
+        public DbSet<Prop> Props { get; set; }
         public  DbSet<Artist> Artists { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
