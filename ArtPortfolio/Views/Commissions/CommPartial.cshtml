@@ -1,7 +1,7 @@
 ﻿@model CommissionListingViewModel
 
 <div class="card p-3">
-    <h4 class="card-title">@Model.Title <span class="float-right">Total price: @($"{Model.Price:00}") EUR</span></h4>
+    <h5 class="card-title">@Model.Title <span class="float-right">Total price: @($"{Model.Price:00}") EUR</span></h5>
     <h5>
         <a asp-controller="Commissions" asp-action="Info" asp-route-id="@Model.Id" role="button" class="btn btn-outline-info col-2 float-right">Details</a>
         <small class="card w-25 border-info text-center p-2">Status: @((Status) Model.Status)</small>

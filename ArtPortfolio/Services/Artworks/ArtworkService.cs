@@ -26,7 +26,12 @@ namespace ArtPortfolio.Services.Artworks
                     Description = a.Description,
                     Likes = a.Likes.Count,
                     Views = a.Views,
-                    IsLiked = a.Likes.Any(l => l.UserId == userId && l.ArtworkId == id)
+                    IsLiked = a.Likes.Any(l => l.UserId == userId && l.ArtworkId == id),
+                    Comments = a.Comments.Select(c => new CommentViewModel()
+                    {
+                        Content = c.Content,
+                        Id = c.Id
+                    }).ToList()
                 }).FirstOrDefault();
         }
         public int CreateArtwork(string title, string description, string imageUrl, int artistId)
@@ -78,6 +83,19 @@ namespace ArtPortfolio.Services.Artworks
         public void View(int id)
         {
             _data.Artworks.FirstOrDefault(a => a.Id == id).Views++;
+            _data.SaveChanges();
+        }
+
+        public void CreateComment(string content, int artworkId, string userId)
+        {
+            var comment = new Comment()
+            {
+                Content = content,
+                ArtworkId = artworkId,
+                UserId = userId
+            };
+
+            _data.Comments.Add(comment);
             _data.SaveChanges();
         }
     }

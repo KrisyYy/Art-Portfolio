@@ -50,7 +50,7 @@ namespace ArtPortfolio.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return View(requestModel);
             }
 
             var commId = _commissionService.Create(

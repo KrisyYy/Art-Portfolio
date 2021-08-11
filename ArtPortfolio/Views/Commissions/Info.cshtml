@@ -7,7 +7,7 @@
 
 <div class="row">
     <div class="card col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-sm-12">
-        <div class="container">
+        <div class="container pb-5">
             <div class="card-body">
                 <h1 class="card-title">@Model.Title</h1>
                 <h4 class="card-subtitle text-muted">by @ViewBag.ArtistName</h4>
@@ -21,11 +21,13 @@
                 }
             </div>
             <div class="container">
-                @if (ArtistService.GetIdByUser(this.User.GetId()) == Model.ArtistId && Model.Status < 5)
-                {
-                    <a asp-controller="Commissions" asp-action="UpdateCommission" asp-route-id="@Model.Id" role="button" class="btn btn-outline-info col-2 float-right">Update</a>
-                }
-                <h4><small class="card w-25 border-info text-center p-2">Status: @((Status) Model.Status)</small></h4>
+                <div class="mb-4">
+                    @if (ArtistService.GetIdByUser(this.User.GetId()) == Model.ArtistId && Model.Status < 5)
+                    {
+                        <a asp-controller="Commissions" asp-action="UpdateCommission" asp-route-id="@Model.Id" role="button" class="btn btn-outline-info col-2 float-right">Update</a>
+                    }
+                    <h4><small class="card w-25 border-info text-center p-2">Status: @((Status) Model.Status)</small></h4>
+                </div>
                 <h3 class="card-title">Info</h3>
                 <div class="card">
                     <div class="card-body">

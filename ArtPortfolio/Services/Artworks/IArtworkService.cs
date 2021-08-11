@@ -14,5 +14,7 @@ namespace ArtPortfolio.Services.Artworks
         void Like(int id, string userId);
 
         void View(int id);
+
+        void CreateComment(string content, int artworkId, string userId);
     }
 }

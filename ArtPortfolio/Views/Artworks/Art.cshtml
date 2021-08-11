@@ -1,6 +1,7 @@
 ﻿@model ArtViewModel
 @{
     ViewData["Title"] = "Art";
+    ViewData["Id"] = Model.Id;
 }
 
 
@@ -20,8 +21,19 @@
                 }
                 <p class="card-text"><small class="text-muted">Likes - @Model.Likes</small><small class="text-muted" style="float: right">Views - @Model.Views</small></p>
             </div>
-            <div class="card-body">
-                @*COMMENTS*@
+            <div class="card-body m-1">
+                <div class="card mb-3">
+                    <partial name="CommentFormPartial" model="new CommentFormModel()" />
+                </div>
+                @if (Model.Comments != null)
+                {
+                    @foreach (var comment in @Model.Comments.OrderByDescending(c => c.Id))
+                    {
+                        <div class="card">
+                            <partial name="CommentPartial" model="comment" />
+                        </div>
+                    }
+                }
             </div>
         </div>
     </div>

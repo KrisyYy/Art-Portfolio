@@ -27,9 +27,27 @@ namespace ArtPortfolio.Controllers
                 return NotFound();
             }
 
-            _artworkService.View(id);
-
             return View(artwork);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Art(int id, CommentFormModel commentModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                var artwork = _artworkService.GetArtworkById(id, this.User.GetId());
+                if (artwork == null)
+                {
+                    return NotFound();
+                }
+
+                return View(artwork);
+            }
+
+            _artworkService.CreateComment(commentModel.Content, id, this.User.GetId());
+
+            return RedirectToAction("Art", "Artworks", new { id = id });
         }
 
 
@@ -90,6 +108,5 @@ namespace ArtPortfolio.Controllers
 
             return RedirectToAction("Art", "Artworks", new { id = id});
         }
-
     }
 }

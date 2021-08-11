@@ -5,87 +5,89 @@
 
 
 <div class="card col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-sm-12">
-    <h1 class="title-margin">Settings</h1>
-    <div id="accordion">
-        <div class="card">
-            <div class="card-header" id="headingOne">
-                <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                        Change Avatar
-                    </button>
-                </h5>
-            </div>
-            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                <div class="card-body">
-                    <form method="post" asp-action="ChangeAvatar">
-                        <div class="form-group">
-                            <label asp-for="AvatarUrl"></label>
-                            <input asp-for="AvatarUrl" class="form-control" placeholder="@Model.AvatarUrl">
-                            <span asp-validation-for="AvatarUrl" class="small text-danger"></span>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                    </form>
+    <div class="container pb-4">
+        <h1 class="title-margin">Settings</h1>
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            Change Avatar
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <form method="post" asp-action="ChangeAvatar">
+                            <div class="form-group">
+                                <label asp-for="AvatarUrl"></label>
+                                <input asp-for="AvatarUrl" class="form-control" placeholder="@Model.AvatarUrl">
+                                <span asp-validation-for="AvatarUrl" class="small text-danger"></span>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="card">
-            <div class="card-header" id="headingTwo">
-                <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        Change Name
-                    </button>
-                </h5>
-            </div>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                <div class="card-body">
-                    <form method="post" asp-action="ChangeName">
-                        <div class="form-group">
-                            <label asp-for="Name"></label>
-                            <input asp-for="Name" class="form-control" placeholder="@Model.Name">
-                            <span asp-validation-for="Name" class="small text-danger"></span>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                    </form>
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Change Name
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div class="card-body">
+                        <form method="post" asp-action="ChangeName">
+                            <div class="form-group">
+                                <label asp-for="Name"></label>
+                                <input asp-for="Name" class="form-control" placeholder="@Model.Name">
+                                <span asp-validation-for="Name" class="small text-danger"></span>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="card">
-            <div class="card-header" id="headingThree">
-                <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        Change Description
-                    </button>
-                </h5>
-            </div>
-            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                <div class="card-body">
-                    <form method="post" asp-action="ChangeDescription">
-                        <div class="form-group">
-                            <label asp-for="Description"></label>
-                            <textarea asp-for="Description" class="form-control" placeholder="@Model.Description" rows="3"></textarea>
-                            <span asp-validation-for="Description" class="small text-danger"></span>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                    </form>
+            <div class="card">
+                <div class="card-header" id="headingThree">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Change Description
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                    <div class="card-body">
+                        <form method="post" asp-action="ChangeDescription">
+                            <div class="form-group">
+                                <label asp-for="Description"></label>
+                                <textarea asp-for="Description" class="form-control" placeholder="@Model.Description" rows="3"></textarea>
+                                <span asp-validation-for="Description" class="small text-danger"></span>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="card">
-            <div class="card-header" id="headingFour">
-                <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                        Manage commissions availability
-                    </button>
-                </h5>
-            </div>
-            <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
-                <div class="card-body">
-                    <form method="post" asp-action="ToggleAvailable">
-                        <button type="submit" class="btn btn-primary">@(Model.AvailableToCommission ? "Close" : "Open") Commissions</button>
-                    </form>
+            <div class="card">
+                <div class="card-header" id="headingFour">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            Manage commissions availability
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+                    <div class="card-body">
+                        <form method="post" asp-action="ToggleAvailable">
+                            <button type="submit" class="btn btn-primary">@(Model.AvailableToCommission ? "Close" : "Open") Commissions</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
