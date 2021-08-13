@@ -10,7 +10,7 @@
     </a>
     <div class="card-body">
         <h5 class="card-title">@Model.Title</h5>
-        @if (currentAction != "MyArtworks")
+        @if (currentAction != "Artworks" && currentAction != "Profile")
         {
             <a asp-controller="Artists" asp-action="Profile" asp-route-id="@Model.ArtistId" class="card-link">
                 <p class="card-text"><small class="text-muted">By @ArtistService.GetName(Model.ArtistId)</small></p>

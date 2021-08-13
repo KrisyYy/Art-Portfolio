@@ -1,0 +1,24 @@
+﻿@model ArtistListingViewModel
+@inject IArtistService ArtistService
+
+<div class="card artist-container">
+    <div class="overflow-auto rounded-top">
+        <div class="float-left">
+            <img class="square-img-sm" src="@Model.Artworks[0].ImageUrl" alt="@Model.Name">
+        </div>
+        <div class="float-left">
+            <img class="square-img-sm" src="@Model.Artworks[1].ImageUrl" alt="@Model.Name">
+        </div>
+        <div class="float-left">
+            <img class="square-img-sm" src="@Model.Artworks[2].ImageUrl" alt="@Model.Name">
+        </div>
+    </div>
+    <div class="font-weight-bold">
+        <img class="avatar-sm" src="@Model.AvatarUrl" alt="@Model.Name">
+        <a asp-controller="Artists" asp-action="Profile" asp-route-id="@Model.Id" class="card-text">@Model.Name</a>
+        @if (@Model.Id != ArtistService.GetIdByUser(this.User.GetId()))
+        {
+            <a asp-controller="Artists" asp-action="Follow" asp-route-id="@Model.Id" role="button" aria-pressed="@(Model.IsFollowed ? "true" : "false")" class="btn btn-outline-info mr-2 mt-2 float-right @(Model.IsFollowed ? "active" : "")">Follow@(Model.IsFollowed ? "ing" : "")</a>
+        }
+    </div>
+</div>

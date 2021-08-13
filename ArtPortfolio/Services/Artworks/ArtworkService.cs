@@ -22,6 +22,8 @@ namespace ArtPortfolio.Services.Artworks
                 {
                     Id = a.Id,
                     Title = a.Title,
+                    ArtistId = a.ArtistId,
+                    ArtistName = a.Artist.Name,
                     ImageUrl = a.ImageUrl,
                     Description = a.Description,
                     Likes = a.Likes.Count,
@@ -29,6 +31,7 @@ namespace ArtPortfolio.Services.Artworks
                     IsLiked = a.Likes.Any(l => l.UserId == userId && l.ArtworkId == id),
                     Comments = a.Comments.Select(c => new CommentViewModel()
                     {
+                        UserId = c.UserId,
                         Content = c.Content,
                         Id = c.Id
                     }).ToList()
@@ -62,6 +65,22 @@ namespace ArtPortfolio.Services.Artworks
             }).ToList();
         }
 
+        public List<ArtListingViewModel> ArtworksFromFollowed(string userId)
+        {
+            return _data.Artworks
+                .Where(a => a.Artist.Follows.Any(f => f.UserId == userId))
+                .OrderByDescending(a => a.Id)
+                .Take(3)
+                .Select(a => new ArtListingViewModel()
+                {
+                    Id = a.Id,
+                    ImageUrl = a.ImageUrl,
+                    Likes = a.Likes.Count,
+                    Title = a.Title,
+                    ArtistId = a.ArtistId
+                }).ToList();
+        }
+
         public void Like(int id, string userId)
         {
             var like = _data.Likes.FirstOrDefault(l => l.UserId == userId && l.ArtworkId == id);
@@ -82,8 +101,43 @@ namespace ArtPortfolio.Services.Artworks
 
         public void View(int id)
         {
-            _data.Artworks.FirstOrDefault(a => a.Id == id).Views++;
+            var artwork = _data.Artworks.FirstOrDefault(a => a.Id == id);
+            if (artwork == null)
+            {
+                return;
+            }  
+            artwork.Views++;
             _data.SaveChanges();
+        }
+
+        public bool Delete(int id)
+        {
+            var artwork = _data.Artworks.FirstOrDefault(a => a.Id == id);
+            if (artwork == null)
+            {
+                return false;
+            }
+
+            _data.Artworks.Remove(artwork);
+            _data.SaveChanges();
+
+            return true;
+        }
+
+        public int DeleteComment(int id)
+        {
+            var comment = _data.Comments.FirstOrDefault(a => a.Id == id);
+            if (comment == null)
+            {
+                return -1;
+            }
+
+            var artId = comment.ArtworkId;
+
+            _data.Comments.Remove(comment);
+            _data.SaveChanges();
+
+            return artId;
         }
 
         public void CreateComment(string content, int artworkId, string userId)

@@ -1,25 +1,63 @@
-﻿@model List<ArtListingViewModel>
+﻿@model IndexViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
-
 @{
-    var firstImage = Model.Any() ? Model[0] : null;
-    var restOfImages = Model.Any() ? Model.Skip(1).ToList() : null;
+    var artworks = Model.Artworks;
+    var artists = Model.Artists;
 }
 
-<div class="text-center">
-    <p>fix irl Softuni page</p>
-    <p>TODO: add pages and show 8 or 12 artworks per page</p>
-    <p>TODO: fix Views++ </p>
-    <p>TODO: Create artist partial</p>
-    <p>TODO: implement search page with sorting and filtering</p>
-    <p>TODO: home page: show works by users you are following (order by latest), recommended users (with top 3 works shown)</p>
-    <p>TODO: implement price sheets page</p>
-    <p>TODO: admin role and rest of fancy stuff from lectures</p>
+@if (User.Identity.IsAuthenticated)
+{
+    <div>
+        @if (artworks != null)
+        {
+            <div class="container p-3">
+                <h2>Works by artists you are following</h2>
+                <div class="row">
+                    @foreach (var artwork in artworks)
+                    {
+                        <partial name="~/Views/Artworks/ArtPartial.cshtml" model="artwork" />
+                    }
+                </div>
+            </div>
+        }
+        @if (artists != null)
+        {
+            <div class="container p-3">
+                <h2>Recommended artists</h2>
+                <div class="row">
+                    @foreach (var artist in artists)
+                    {
+                        <partial name="~/Views/Artists/ArtistPartial.cshtml" model="artist" />
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="col-8 m-auto">
+        <div class="jumbotron">
+            <div class="container text-center">
+                <h1 class="display-4 ">Welcome to Art Portfolio!</h1>
+                <p class="lead">Please log in to continue</p>
+                <a asp-area="Identity" asp-page="/Account/Register" role="button" class="btn btn-primary col-6 m-1">Sign Up</a>
+                <a asp-area="Identity" asp-page="/Account/Login" role="button" class="btn btn-outline-primary col-6 m-1">Sign In</a>
+            </div>
+        </div>
+    </div>
+}
 
-    @if (firstImage == null)
-    {
-        <p>No images available</p>
-    }
-</div>
+
+
+@*<div class="text-center small">
+    <p>fix irl Softuni page</p>
+    <p>FIX: make updating status on comms a dropdown</p>
+    <p>FIX: Views++ </p>
+    <p>TODO: implement paging and show 8 or 12 artworks per page</p>
+    <p>TODO: implement sorting</p>
+    <p>TODO: add price sheets page</p>
+    <p>TODO: admin role and rest of fancy stuff from lectures</p>
+</div>*@

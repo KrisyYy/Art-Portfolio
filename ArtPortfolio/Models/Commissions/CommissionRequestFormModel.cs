@@ -9,9 +9,12 @@ namespace ArtPortfolio.Models.Commissions
     public class CommissionRequestFormModel
     {
         public int ArtistId { get; set; }
+
         [Required]
-        [StringLength(TitleMaxLen, MinimumLength = TitleMinLen)]
+        [MaxLength(TitleMaxLen, ErrorMessage = "Title field must be shorter than {1}")]
+        [MinLength(TitleMinLen, ErrorMessage = "Title field must be longer than {1}")]
         public string Title { get; set; }
+
         public int CommissionType { get; set; }
 
         public int SceneryType { get; set; }
@@ -22,7 +25,8 @@ namespace ArtPortfolio.Models.Commissions
 
         public List<PropFormModel> Props { get; set; }
 
-        [StringLength(DescriptionMaxLen, MinimumLength = DescriptionMinLen)]
+        [MaxLength(DescriptionMaxLen, ErrorMessage = "Description field must be shorter than {1}")]
+        [MinLength(DescriptionMinLen, ErrorMessage = "Description field must be longer than {1}")]
         public string NoteFromClient { get; set; }
 
         public decimal Price { get; set; }

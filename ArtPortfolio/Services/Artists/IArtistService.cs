@@ -1,4 +1,5 @@
-﻿using ArtPortfolio.Models.Artists;
+﻿using System.Collections.Generic;
+using ArtPortfolio.Models.Artists;
 
 namespace ArtPortfolio.Services.Artists
 {
@@ -13,6 +14,8 @@ namespace ArtPortfolio.Services.Artists
         int CreateArtist(string name, string description, string userId);
 
         ArtistViewModel GetArtistById(int id, string userId);
+
+        List<ArtistListingViewModel> RecommendedArtists(string userId);
 
         void Follow(int id, string userId);
 

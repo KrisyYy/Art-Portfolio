@@ -1,9 +1,12 @@
 ﻿@model List<ArtListingViewModel>
+@inject IArtistService ArtistService
 @{
-    ViewData["Title"] = "My Artworks";
+    var artist = ArtistService.GetName(ViewBag.ArtistId);
+    var title = artist + "'s Artworks";
+    ViewData["Title"] = title;
 }
 
-<h1 class="title-margin">My Artworks</h1>
+<h1 class="title-margin">@title</h1>
 @if (!Model.Any())
 {
     <p>No artworks yet</p>

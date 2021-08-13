@@ -1,16 +1,58 @@
-﻿@model List<ArtListingViewModel>
+﻿@model AllArtworksViewModel
 @{
     ViewData["Title"] = "All";
+    var artworks = Model.Artworks;
 }
 
-<h1 class="title-margin">Recommended artworks</h1>
-@if (!Model.Any())
-{
-    <p>No artworks yet</p>
-}
-<div class="row">
-    @foreach (var art in Model)
-    {
-        <partial name="ArtPartial" model="@art" />
-    }
+<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="filterModalLabel">Filter</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="get">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label asp-for="Search"></label>
+                            <input asp-for="Search" class="form-control" placeholder="Search for something specific..">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info col-6 float-right">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
+
+<div>
+    <button type="button" class="btn btn-info col-2 mt-2 float-right" data-toggle="modal" data-target="#filterModal">Filter</button>
+    <h1 class="title-margin col-8">Recommended artworks</h1>
+</div>
+<div>
+    @if (!artworks.Any())
+    {
+        <p class="card-text">No artworks found</p>
+    }
+    <div class="row">
+        @foreach (var art in artworks)
+        {
+            <partial name="ArtPartial" model="@art" />
+        }
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $("#btnFilter").click(function(e) {
+            e.preventDefault();
+            $("#filter").removeClass("d-none");
+
+        });
+    </script>
+}

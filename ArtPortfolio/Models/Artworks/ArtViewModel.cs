@@ -10,6 +10,10 @@ namespace ArtPortfolio.Models.Artworks
 
         public string Title { get; set; }
 
+        public int ArtistId { get; set; }
+
+        public string ArtistName { get; set; }
+
         public string Description { get; set; }
 
         public int Views { get; set; }

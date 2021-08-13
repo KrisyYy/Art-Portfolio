@@ -6,7 +6,7 @@
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
-        var userId = User.GetId();
+        var userId = this.User.GetId();
         var isArtist = ArtistService.IsArtist(userId);
         @if (isArtist)
         {
@@ -14,7 +14,7 @@
                 <a class="nav-link text-dark" asp-area="" asp-controller="Artists" asp-action="Profile" asp-route-id="@ArtistService.GetIdByUser(this.User.GetId())">@ArtistService.GetName(ArtistService.GetIdByUser(userId))</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Artworks" asp-action="MyArtworks" asp-route-id="@ArtistService.GetIdByUser(this.User.GetId())">Artworks</a>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Artworks" asp-action="Artworks" asp-route-id="@ArtistService.GetIdByUser(this.User.GetId())">Artworks</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-dark" asp-area="" asp-controller="Commissions" asp-action="MyCommissions" asp-route-id="@ArtistService.GetIdByUser(this.User.GetId())">Commissions</a>

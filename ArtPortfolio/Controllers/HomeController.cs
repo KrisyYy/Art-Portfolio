@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Linq;
 using ArtPortfolio.Data;
+using ArtPortfolio.Extensions;
 using ArtPortfolio.Models.Artworks;
+using ArtPortfolio.Models.Home;
+using ArtPortfolio.Services.Artists;
 using ArtPortfolio.Services.Artworks;
 
 namespace ArtPortfolio.Controllers
@@ -11,23 +14,27 @@ namespace ArtPortfolio.Controllers
     public class HomeController : Controller
     {
         private readonly IArtworkService _artworkService;
+        private readonly IArtistService _artistService;
 
-        public HomeController(IArtworkService artworkService)
+        public HomeController(IArtworkService artworkService, IArtistService artistService)
         {
             _artworkService = artworkService;
+            _artistService = artistService;
         }
 
         public IActionResult Index()
         {
-            var selection = _artworkService.GetListOfArtworks()
-                .OrderByDescending(a => a.Likes)
-                .ToList();
+            var userId = this.User.GetId();
+            var artworks = _artworkService.ArtworksFromFollowed(userId);
+            var artists = _artistService.RecommendedArtists(userId);
 
-            var numberOfImages = selection.Count() <= 5 ? selection.Count() : 5;
+            var indexModel = new IndexViewModel()
+            {
+                Artists = artists,
+                Artworks = artworks
+            };
 
-            var artworks = selection.Take(numberOfImages).ToList();
-
-            return View(artworks);
+            return View(indexModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

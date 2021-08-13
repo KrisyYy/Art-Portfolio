@@ -1,8 +1,14 @@
 ﻿@model CommentViewModel
 
 <div class="p-3">
-    <div class="container">
+    <div class="container float-left">
         <h5 class="card-title"><small>from: </small>@this.User.GetUsername()</h5>
         <p class="card-text">@Model.Content</p>
+    </div>
+    <div class="float-right">
+        @if (@Model.UserId == this.User.GetId())
+        {
+            <a asp-controller="Artworks" asp-action="DeleteComment" asp-route-id="@Model.Id" role="button" class="btn btn-outline-info float-right">Delete</a>
+        }
     </div>
 </div>
