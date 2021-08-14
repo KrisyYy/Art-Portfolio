@@ -17,7 +17,7 @@
                 <a class="nav-link text-dark" asp-area="" asp-controller="Artworks" asp-action="Artworks" asp-route-id="@ArtistService.GetIdByUser(this.User.GetId())">Artworks</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Commissions" asp-action="MyCommissions" asp-route-id="@ArtistService.GetIdByUser(this.User.GetId())">Commissions</a>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Commissions" asp-action="Commissions" asp-route-id="@ArtistService.GetIdByUser(this.User.GetId())">Commissions</a>
             </li>
         }
         else

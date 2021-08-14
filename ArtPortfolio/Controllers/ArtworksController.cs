@@ -75,7 +75,7 @@ namespace ArtPortfolio.Controllers
         }
 
 
-        public IActionResult All(string search)
+        public IActionResult All(string search, ArtSort order)
         {
             var artworks = _artworkService.GetListOfArtworks();
 
@@ -90,10 +90,26 @@ namespace ArtPortfolio.Controllers
                     .ToList();
             }
 
-            artworks = artworks
-                .OrderByDescending(a => a.Likes)
-                .ThenByDescending(a => a.Id)
-                .ToList();
+            switch (order)
+            {
+                case ArtSort.Likes:
+                    artworks = artworks
+                        .OrderByDescending(a => a.Likes)
+                        .ToList();
+                    break;
+                case ArtSort.Date:
+                    artworks = artworks
+                        .OrderByDescending(a => a.Id)
+                        .ToList();
+                    break;
+                case ArtSort.Name:
+                    artworks = artworks
+                        .OrderBy(a => a.Title)
+                        .ToList();
+                    break;
+            }
+
+            
 
             return View(new AllArtworksViewModel()
             {

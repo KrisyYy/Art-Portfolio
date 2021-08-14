@@ -25,7 +25,7 @@ namespace ArtPortfolio.Services.Commissions
 
         CommissionInfoViewModel GetCommission(int id);
 
-        void UpdateCommission(int id);
+        void UpdateCommission(int id, int status);
 
         List<CommissionListingViewModel> GetListOfCommissions(int id);
     }

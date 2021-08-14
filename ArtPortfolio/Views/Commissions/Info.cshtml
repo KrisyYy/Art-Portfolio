@@ -19,14 +19,27 @@
                 {
                     <span class="badge badge-secondary">Private</span>
                 }
+                @if (ArtistService.GetIdByUser(this.User.GetId()) == Model.ArtistId)
+                {
+                    <form method="post" asp-controller="Commissions" asp-action="UpdateCommission" asp-route-id="@Model.Id">
+                        <div class="col-4 float-right">
+                            <label asp-for="Status">
+                                Update Status
+                            </label>
+                            <select asp-for="Status" class="form-control" style="border-color: #17a2b8;" id="exampleFormControlSelect1">
+                                @foreach (int option in Enum.GetValues(typeof(Status)))
+                                {
+                                    <option value="@option">@((Status) option)</option>
+                                }
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-outline-info mt-2">Submit</button>
+                        </div>
+                    </form>
+                }
             </div>
             <div class="container">
-                <div class="mb-4">
-                    @if (ArtistService.GetIdByUser(this.User.GetId()) == Model.ArtistId && Model.Status < 5)
-                    {
-                        <a asp-controller="Commissions" asp-action="UpdateCommission" asp-route-id="@Model.Id" role="button" class="btn btn-outline-info col-2 float-right">Update</a>
-                    }
-                    <h4><small class="card w-25 border-info text-center p-2">Status: @((Status) Model.Status)</small></h4>
+                <div class="mb-4 mt-3">
+                    <h5><small class="card w-25 border-info text-center p-2">Status: @((Status) Model.Status)</small></h5>
                 </div>
                 <h3 class="card-title">Info</h3>
                 <div class="card">

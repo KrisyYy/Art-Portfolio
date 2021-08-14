@@ -86,21 +86,15 @@ namespace ArtPortfolio.Services.Commissions
             return commissionData;
         }
 
-        public void UpdateCommission(int id)
+        public void UpdateCommission(int id, int status)
         {
             var commission = _data.Commissions.FirstOrDefault(c => c.Id == id);
             if (commission == null)
                 return;
-            if (commission.Status == Status.Finished)
-            {
-                return;
-            }
 
-            commission.Status++;
-            if (commission.Status == Status.Finished)
-            {
-                commission.IsComplete = true;
-            }
+            commission.Status = (Status)status;
+            commission.IsComplete = commission.Status == Status.Finished;
+
             _data.SaveChanges();
         }
 

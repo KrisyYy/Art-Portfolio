@@ -8,6 +8,6 @@ namespace ArtPortfolio.Models.Artworks
 
         public string Search { get; set; }
 
-        public string Order { get; set; }
+        public ArtSort Order { get; set; }
     }
 }

@@ -27,7 +27,7 @@
         <div class="card-body">
             @if (@Model.Id != ArtistService.GetIdByUser(this.User.GetId()) && Model.AvailableToCommission)
             {
-                <a asp-controller="Commissions" asp-action="Commission" asp-route-id="@Model.Id" role="button" class="btn btn-outline-info col-5">Commission</a>
+                <a asp-controller="Commissions" asp-action="NewCommission" asp-route-id="@Model.Id" role="button" class="btn btn-outline-info col-5">Commission</a>
             }
         </div>
     </div>

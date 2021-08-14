@@ -37,7 +37,7 @@ namespace ArtPortfolio.Controllers
         }
         
 
-        public IActionResult Commission(int id)
+        public IActionResult NewCommission(int id)
         {
             var artistName = _artistService.GetName(id);
             ViewBag.ArtistName = artistName;
@@ -46,7 +46,7 @@ namespace ArtPortfolio.Controllers
         }
 
         [HttpPost]
-        public IActionResult Commission(CommissionRequestFormModel requestModel)
+        public IActionResult NewCommission(CommissionRequestFormModel requestModel)
         {
             if (!ModelState.IsValid)
             {
@@ -80,16 +80,17 @@ namespace ArtPortfolio.Controllers
             return RedirectToAction("Info", "Commissions", new {id = commId});
         }
 
-        public IActionResult MyCommissions(int id)
+        public IActionResult Commissions(int id)
         {
             var data = _commissionService.GetListOfCommissions(id);
 
             return View(data);
         }
 
-        public IActionResult UpdateCommission(int id)
+        [HttpPost]
+        public IActionResult UpdateCommission(int id, int status)
         {
-            _commissionService.UpdateCommission(id);
+            _commissionService.UpdateCommission(id, status);
 
             return RedirectToAction("Info", "Commissions", new { id = id });
         }
