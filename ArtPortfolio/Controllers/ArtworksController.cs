@@ -23,13 +23,18 @@ namespace ArtPortfolio.Controllers
 
         public IActionResult Art(int id)
         {
-            var artwork = _artworkService.GetArtworkById(id, this.User.GetId());
+            var artwork = _artworkService.GetArtworkById(id);
             if (artwork == null)
             {
                 return NotFound();
             }
 
-            return View(artwork);
+            return View(new ArtViewModel()
+            {
+                Artwork = artwork,
+                Comments = _artworkService.GetListOfComments(id),
+                IsLiked = _artworkService.IsLiked(id, this.User.GetId())
+            });
         }
 
         [HttpPost]
@@ -37,7 +42,7 @@ namespace ArtPortfolio.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var artwork = _artworkService.GetArtworkById(id, this.User.GetId());
+                var artwork = _artworkService.GetArtworkById(id);
                 if (artwork == null)
                 {
                     return NotFound();
@@ -75,53 +80,20 @@ namespace ArtPortfolio.Controllers
         }
 
 
-        public IActionResult All(string search, ArtSort order)
+        public IActionResult All([FromQuery]AllArtworksViewModel artModel)
         {
-            var artworks = _artworkService.GetListOfArtworks();
+            var artworks = _artworkService.GetListOfArtworks(artModel.Search, artModel.Order, artModel.Page, AllArtworksViewModel.ArtPerPage);
 
-            if (!string.IsNullOrWhiteSpace(search))
-            {
-                artworks = artworks
-                    .Where(a => 
-                        a.Title.Contains(search, StringComparison.OrdinalIgnoreCase) ||
-                         _artistService.GetName(a.ArtistId).Contains(search, StringComparison.OrdinalIgnoreCase) ||
-                        _artworkService.GetArtworkById(a.Id, this.User.GetId()).Description != null && 
-                        _artworkService.GetArtworkById(a.Id, this.User.GetId()).Description.Contains(search, StringComparison.OrdinalIgnoreCase))
-                    .ToList();
-            }
+            artModel.Artworks = artworks.Artworks;
+            artModel.MaxPage = artworks.MaxPage;
 
-            switch (order)
-            {
-                case ArtSort.Likes:
-                    artworks = artworks
-                        .OrderByDescending(a => a.Likes)
-                        .ToList();
-                    break;
-                case ArtSort.Date:
-                    artworks = artworks
-                        .OrderByDescending(a => a.Id)
-                        .ToList();
-                    break;
-                case ArtSort.Name:
-                    artworks = artworks
-                        .OrderBy(a => a.Title)
-                        .ToList();
-                    break;
-            }
-
-            
-
-            return View(new AllArtworksViewModel()
-            {
-                Artworks = artworks,
-                Search = search
-            });
+            return View(artModel);
         }
         
         public IActionResult Artworks(int id)
         {
-            var data = _artworkService.GetListOfArtworks()
-                .OrderByDescending(a => a.Id)
+            var data = _artworkService.GetListOfArtworks();
+            data.Artworks = data.Artworks
                 .Where(a => a.ArtistId == id)
                 .ToList();
 

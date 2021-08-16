@@ -1,18 +1,20 @@
-﻿@model List<ArtListingViewModel>
+﻿@model ArtworkListingServiceModel
 @inject IArtistService ArtistService
 @{
     var artist = ArtistService.GetName(ViewBag.ArtistId);
+    var artworks = Model.Artworks;
     var title = artist + "'s Artworks";
+
     ViewData["Title"] = title;
 }
 
 <h1 class="title-margin">@title</h1>
-@if (!Model.Any())
+@if (!artworks.Any())
 {
     <p>No artworks yet</p>
 }
 <div class="row">
-    @foreach (var art in Model)
+    @foreach (var art in artworks)
     {
         <partial name="ArtPartial" model="@art" />
     }

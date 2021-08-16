@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using ArtPortfolio.Models.Artworks;
+using ArtPortfolio.Services.Artworks.Models;
 
 namespace ArtPortfolio.Models.Artists
 {
@@ -18,6 +18,6 @@ namespace ArtPortfolio.Models.Artists
 
         public bool AvailableToCommission { get; set; }
 
-        public List<ArtListingViewModel> Artworks { get; set; }
+        public List<ArtworkServiceModel> Artworks { get; set; }
     }
 }

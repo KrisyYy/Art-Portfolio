@@ -2,7 +2,9 @@
 @inject IArtistService _artistService
 @{
     ViewData["Title"] = "Art";
-    ViewBag.Id = Model.Id;
+
+    var artwork = Model.Artwork;
+    ViewBag.Id = artwork.Id;
 }
 
 
@@ -10,24 +12,24 @@
 <div class="row">
     <div class="offset-lg-2 col-lg-8 offset-md-1 col-md-10 col-sm-12">
         <div class="card">
-            <img class="card-img-top" src="@Model.ImageUrl" alt="Card image cap">
+            <img class="card-img-top" src="@artwork.ImageUrl" alt="Card image cap">
             <div class="card-body">
-                <h5 class="card-title">@Model.Title</h5>
-                <a asp-controller="Artists" asp-action="Profile" asp-route-id="@Model.ArtistId" class="card-link">
-                    <p class="card-text"><small class="text-muted">By @Model.ArtistName</small></p>
+                <h5 class="card-title">@artwork.Title</h5>
+                <a asp-controller="Artists" asp-action="Profile" asp-route-id="@artwork.ArtistId" class="card-link">
+                    <p class="card-text"><small class="text-muted">By @artwork.ArtistName</small></p>
                 </a>
-                <p class="card-text">@Model.Description</p>
+                <p class="card-text">@artwork.Description</p>
             </div>
             <div class="mt-4 pl-5 pr-5">
                 <div class="container">
-                    <a asp-controller="Artworks" asp-action="Like" asp-route-id="@Model.Id" role="button" class="btn btn-outline-info @(Model.IsLiked ? "active" : "")" aria-pressed="@(Model.IsLiked ? "true" : "false")">Like@(Model.IsLiked ? "d" : "")</a>
-                    @if (@Model.ArtistId == _artistService.GetIdByUser(this.User.GetId()))
+                    <a asp-controller="Artworks" asp-action="Like" asp-route-id="@artwork.Id" role="button" class="btn btn-outline-info @(Model.IsLiked ? "active" : "")" aria-pressed="@(Model.IsLiked ? "true" : "false")">Like@(Model.IsLiked ? "d" : "")</a>
+                    @if (artwork.ArtistId == _artistService.GetIdByUser(this.User.GetId()))
                     {
-                        <a asp-controller="Artworks" asp-action="Delete" asp-route-id="@Model.Id" role="button" class="btn btn-outline-info float-right">Delete</a>
+                        <a asp-controller="Artworks" asp-action="Delete" asp-route-id="@artwork.Id" role="button" class="btn btn-outline-info float-right">Delete</a>
                     }
                 </div>
                 <div class="container">
-                    <p class="card-text"><small class="text-muted">Likes - @Model.Likes</small><small class="text-muted float-right">Views - @Model.Views</small></p>
+                    <p class="card-text"><small class="text-muted">Likes - @artwork.Likes</small><small class="text-muted float-right">Views - @artwork.Views</small></p>
                 </div>
             </div>
             <div class="card-body m-1">

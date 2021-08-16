@@ -1,5 +1,4 @@
-﻿@model ArtListingViewModel
-@inject IArtistService ArtistService
+﻿@model ArtworkServiceModel
 @{
     var currentAction = this.ViewContext.RouteData.Values["action"].ToString();
 }
@@ -13,7 +12,7 @@
         @if (currentAction != "Artworks" && currentAction != "Profile")
         {
             <a asp-controller="Artists" asp-action="Profile" asp-route-id="@Model.ArtistId" class="card-link">
-                <p class="card-text"><small class="text-muted">By @ArtistService.GetName(Model.ArtistId)</small></p>
+                <p class="card-text"><small class="text-muted">By @Model.ArtistName</small></p>
             </a>
         }
     </div>

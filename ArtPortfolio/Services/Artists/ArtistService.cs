@@ -4,6 +4,7 @@ using ArtPortfolio.Data;
 using ArtPortfolio.Data.Models;
 using ArtPortfolio.Models.Artists;
 using ArtPortfolio.Models.Artworks;
+using ArtPortfolio.Services.Artworks.Models;
 
 namespace ArtPortfolio.Services.Artists
 {
@@ -59,10 +60,11 @@ namespace ArtPortfolio.Services.Artists
                     Description = a.Description,
                     Followers = a.Follows.Count,
                     IsFollowed = _data.Follows.Any(ar => ar.ArtistId == id && ar.UserId == userId),
-                    Artworks = a.Artworks.Select(ar => new ArtListingViewModel()
+                    Artworks = a.Artworks.Select(ar => new ArtworkServiceModel()
                     {
                         Id = ar.Id,
                         ArtistId = a.Id,
+                        ArtistName = a.Name,
                         Title = ar.Title,
                         ImageUrl = ar.ImageUrl,
                         Likes = ar.Likes.Count
