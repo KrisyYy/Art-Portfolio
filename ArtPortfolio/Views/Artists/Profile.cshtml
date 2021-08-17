@@ -37,7 +37,7 @@
             <div class="row">
                 @foreach (var art in Model.Artworks.Take(2))
                 {
-                    <partial name="~/Views/Artworks/ArtPartial.cshtml" model="@art" />
+                    <partial name="~/Views/Artworks/_ArtPartial.cshtml" model="@art" />
                 }
             </div>
             @if (showMore)

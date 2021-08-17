@@ -25,7 +25,8 @@
                     <a asp-controller="Artworks" asp-action="Like" asp-route-id="@artwork.Id" role="button" class="btn btn-outline-info @(Model.IsLiked ? "active" : "")" aria-pressed="@(Model.IsLiked ? "true" : "false")">Like@(Model.IsLiked ? "d" : "")</a>
                     @if (artwork.ArtistId == _artistService.GetIdByUser(this.User.GetId()))
                     {
-                        <a asp-controller="Artworks" asp-action="Delete" asp-route-id="@artwork.Id" role="button" class="btn btn-outline-info float-right">Delete</a>
+                        <a asp-controller="Artworks" asp-action="Delete" asp-route-id="@artwork.Id" role="button" class="btn btn-outline-info float-right m-1">Delete</a>
+                        <a asp-controller="Artworks" asp-action="Edit" asp-route-id="@artwork.Id" role="button" class="btn btn-outline-info float-right m-1">Edit</a>
                     }
                 </div>
                 <div class="container">
@@ -34,14 +35,14 @@
             </div>
             <div class="card-body m-1">
                 <div class="card mb-3">
-                    <partial name="CommentFormPartial" model="new CommentFormModel()" />
+                    <partial name="_CommentFormPartial" model="new CommentFormModel()" />
                 </div>
                 @if (Model.Comments != null)
                 {
                     @foreach (var comment in @Model.Comments.OrderByDescending(c => c.Id))
                     {
                         <div class="card">
-                            <partial name="CommentPartial" model="comment" />
+                            <partial name="_CommentPartial" model="comment" />
                         </div>
                     }
                 }

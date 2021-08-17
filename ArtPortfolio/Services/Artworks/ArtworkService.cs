@@ -54,6 +54,26 @@ namespace ArtPortfolio.Services.Artworks
             return artwork.Id;
         }
 
+
+        public bool EditArtwork(int id, string title, string description, string imageUrl, int artistId)
+        {
+            var artwork = _data.Artworks.Find(id);
+
+            if (artwork == null || artistId != artwork.ArtistId)
+            {
+                return false;
+            }
+
+            artwork.Title = title;
+            artwork.Description = description;
+            artwork.ImageUrl = imageUrl;
+            
+            _data.SaveChanges();
+
+            return true;
+        }
+
+
         public ArtworkListingServiceModel GetListOfArtworks(string search = null, int order = 1, int page = 1, int artPerPage = int.MaxValue)
         {
             var artworksQuery = _data.Artworks.AsQueryable();

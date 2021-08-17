@@ -14,6 +14,8 @@ namespace ArtPortfolio.Extensions
                 .ForMember(a => a.ArtistName, cfg => cfg.MapFrom(a => a.Artist.Name));
 
             this.CreateMap<Comment, CommentViewModel>();
+
+            this.CreateMap<ArtworkServiceModel, ArtCreateModel>();
         }
     }
 }

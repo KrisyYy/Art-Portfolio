@@ -5,6 +5,7 @@ using ArtPortfolio.Extensions;
 using ArtPortfolio.Models.Artworks;
 using ArtPortfolio.Services.Artists;
 using ArtPortfolio.Services.Artworks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 
 namespace ArtPortfolio.Controllers
@@ -14,11 +15,13 @@ namespace ArtPortfolio.Controllers
     {
         private readonly IArtworkService _artworkService;
         private readonly IArtistService _artistService;
+        private readonly IMapper _mapper;
 
-        public ArtworksController(IArtworkService artworkService, IArtistService artistService)
+        public ArtworksController(IArtworkService artworkService, IArtistService artistService, IMapper mapper)
         {
             _artworkService = artworkService;
             _artistService = artistService;
+            _mapper = mapper;
         }
 
         public IActionResult Art(int id)
@@ -105,6 +108,13 @@ namespace ArtPortfolio.Controllers
         
         public IActionResult Create()
         {
+            var userId = this.User.GetId();
+
+            if (!_artistService.IsArtist(userId))
+            {
+                return RedirectToAction("BecomeArtist", "Artists");
+            }
+
             return View();
         }
 
@@ -113,6 +123,11 @@ namespace ArtPortfolio.Controllers
         {
             var userId = this.User.GetId();
             var artistId = _artistService.GetIdByUser(userId);
+
+            if (artistId == 0)
+            {
+                return RedirectToAction("BecomeArtist", "Artists");
+            }
 
             if (!ModelState.IsValid)
             {
@@ -131,7 +146,62 @@ namespace ArtPortfolio.Controllers
         }
 
 
-        
+        public IActionResult Edit(int id)
+        {
+            var userId = this.User.GetId();
+
+            if (!_artistService.IsArtist(userId))
+            {
+                return RedirectToAction("BecomeArtist", "Artists");
+            }
+
+            var artwork = _artworkService.GetArtworkById(id);
+            var artistId = _artistService.GetIdByUser(userId);
+
+            if (artwork.ArtistId != artistId)
+            {
+                return Unauthorized();
+            }
+
+            var artForm = _mapper.Map<ArtCreateModel>(artwork);
+
+            return View(artForm);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(int id, ArtCreateModel artModel)
+        {
+            var userId = this.User.GetId();
+            var artistId = _artistService.GetIdByUser(userId);
+
+            if (artistId == 0)
+            {
+                return RedirectToAction("BecomeArtist", "Artists");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(artModel);
+            }
+
+            var editArtwork = _artworkService.EditArtwork
+            (
+                id,
+                artModel.Title,
+                artModel.Description,
+                artModel.ImageUrl,
+                artistId
+            );
+
+            if (!editArtwork)
+            {
+                return BadRequest();
+            }
+
+            return RedirectToAction("Art", "Artworks", new { id = id });
+        }
+
+
         public IActionResult Like(int id)
         {
             _artworkService.Like(id, this.User.GetId());

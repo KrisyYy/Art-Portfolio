@@ -17,7 +17,7 @@
                 <div class="row">
                     @foreach (var artwork in artworks)
                     {
-                        <partial name="~/Views/Artworks/ArtPartial.cshtml" model="artwork" />
+                        <partial name="~/Views/Artworks/_ArtPartial.cshtml" model="artwork" />
                     }
                 </div>
             </div>
@@ -29,7 +29,7 @@
                 <div class="row">
                     @foreach (var artist in artists)
                     {
-                        <partial name="~/Views/Artists/ArtistPartial.cshtml" model="artist" />
+                        <partial name="~/Views/Artists/_ArtistPartial.cshtml" model="artist" />
                     }
                 </div>
             </div>
@@ -53,8 +53,11 @@ else
 
 
 @*
+    TODO: admin role
+    TODO: Unit Tests
+    TODO: redirect when user is not authorized
+    TODO: change like and follow button to be AJAX requests
     FIX: Views++
     FIX: Artist and Commission Models
-    TODO: add price sheets page
-    TODO: admin role and rest of fancy stuff from lectures
+    Extra: add price sheets page
 *@
