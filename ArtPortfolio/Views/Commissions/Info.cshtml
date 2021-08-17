@@ -19,7 +19,7 @@
                 {
                     <span class="badge badge-secondary">Private</span>
                 }
-                @if (ArtistService.GetIdByUser(this.User.GetId()) == Model.ArtistId)
+                @if (ArtistService.GetIdByUser(this.User.Id()) == Model.ArtistId)
                 {
                     <form method="post" asp-controller="Commissions" asp-action="UpdateCommission" asp-route-id="@Model.Id">
                         <div class="col-4 float-right">

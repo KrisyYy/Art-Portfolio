@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ArtPortfolio.Data;
 using ArtPortfolio.Data.Models;
-using ArtPortfolio.Models.Artworks;
-using ArtPortfolio.Services.Artists;
 using ArtPortfolio.Services.Artworks.Models;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -29,13 +27,14 @@ namespace ArtPortfolio.Services.Artworks
                 .ProjectTo<ArtworkServiceModel>(_mapper.ConfigurationProvider)
                 .FirstOrDefault();
 
+        public int ArtistId(int artId)
+        {
+            return _data.Artworks.Find(artId).ArtistId;
+        }
+
 
         public bool IsLiked(int id, string userId)
             => _data.Likes.Any(l => l.UserId == userId && l.ArtworkId == id);
-
-
-        public List<CommentViewModel> GetListOfComments(int id)
-            => GetComments(_data.Comments.Where(c => c.ArtworkId == id));
 
 
         public int CreateArtwork(string title, string description, string imageUrl, int artistId)
@@ -59,7 +58,7 @@ namespace ArtPortfolio.Services.Artworks
         {
             var artwork = _data.Artworks.Find(id);
 
-            if (artwork == null || artistId != artwork.ArtistId)
+            if (artwork == null)
             {
                 return false;
             }
@@ -123,6 +122,7 @@ namespace ArtPortfolio.Services.Artworks
                 .Take(3));
         }
 
+
         public void Like(int id, string userId)
         {
             var like = _data.Likes.FirstOrDefault(l => l.UserId == userId && l.ArtworkId == id);
@@ -141,6 +141,7 @@ namespace ArtPortfolio.Services.Artworks
             _data.SaveChanges();
         }
 
+
         public void View(int id)
         {
             var artwork = _data.Artworks.FirstOrDefault(a => a.Id == id);
@@ -151,6 +152,7 @@ namespace ArtPortfolio.Services.Artworks
             artwork.Views++;
             _data.SaveChanges();
         }
+
 
         public bool Delete(int id)
         {
@@ -166,47 +168,11 @@ namespace ArtPortfolio.Services.Artworks
             return true;
         }
 
-        public int DeleteComment(int id)
-        {
-            var comment = _data.Comments.FirstOrDefault(a => a.Id == id);
-            if (comment == null)
-            {
-                return -1;
-            }
 
-            var artId = comment.ArtworkId;
-
-            _data.Comments.Remove(comment);
-            _data.SaveChanges();
-
-            return artId;
-        }
-
-        public void CreateComment(string content, int artworkId, string userId)
-        {
-            var comment = new Comment()
-            {
-                Content = content,
-                ArtworkId = artworkId,
-                UserId = userId
-            };
-
-            _data.Comments.Add(comment);
-            _data.SaveChanges();
-        }
 
         private List<ArtworkServiceModel> GetArtworks(IQueryable<Artwork> artworks)
             => artworks
                 .ProjectTo<ArtworkServiceModel>(_mapper.ConfigurationProvider)
                 .ToList();
-
-        private ArtworkServiceModel GetArtwork(Artwork artwork)
-            => _mapper.Map<ArtworkServiceModel>(artwork);
-
-        private List<CommentViewModel> GetComments(IQueryable<Comment> comments)
-            => comments
-                .ProjectTo<CommentViewModel>(_mapper.ConfigurationProvider)
-                .ToList();
-
     }
 }

@@ -11,7 +11,7 @@
     <div class="card mb-3">
         <img class="avatar" src="@Model.AvatarUrl" alt="avatar">
         <div class="card-body">
-            @if (@Model.Id != ArtistService.GetIdByUser(this.User.GetId()))
+            @if (@Model.Id != ArtistService.GetIdByUser(this.User.Id()))
             {
                 <a asp-controller="Artists" asp-action="Follow" asp-route-id="@Model.Id" role="button" aria-pressed="@(Model.IsFollowed ? "true" : "false")" class="btn btn-outline-info col-2 float-right @(Model.IsFollowed ? "active" : "")">Follow@(Model.IsFollowed ? "ing" : "")</a>
             }
@@ -19,13 +19,13 @@
             <h5><span class="badge badge-pill badge-info">@(Model.AvailableToCommission ? "Accepting commissions" : "")</span></h5>
             <p class="card-text">@Model.Description</p>
             <p class="card-text"><small class="text-muted">Followers - @Model.Followers</small></p>
-            @if (@Model.Id == ArtistService.GetIdByUser(this.User.GetId()))
+            @if (@Model.Id == ArtistService.GetIdByUser(this.User.Id()))
             {
                 <a asp-controller="Artists" asp-action="Settings" role="button" class="btn btn-outline-info col-2 float-right">Settings</a>
             }
         </div>
         <div class="card-body">
-            @if (@Model.Id != ArtistService.GetIdByUser(this.User.GetId()) && Model.AvailableToCommission)
+            @if (@Model.Id != ArtistService.GetIdByUser(this.User.Id()) && Model.AvailableToCommission)
             {
                 <a asp-controller="Commissions" asp-action="NewCommission" asp-route-id="@Model.Id" role="button" class="btn btn-outline-info col-5">Commission</a>
             }

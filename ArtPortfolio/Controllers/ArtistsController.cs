@@ -24,7 +24,7 @@ namespace ArtPortfolio.Controllers
         [HttpPost]
         public IActionResult BecomeArtist(BecomeArtistFormModel artistModel)
         {
-            var currentUserId = this.User.GetId();
+            var currentUserId = this.User.Id();
             if (_artistService.IsArtist(currentUserId))
             {
                 return BadRequest();
@@ -46,7 +46,7 @@ namespace ArtPortfolio.Controllers
         
         public IActionResult Profile(int id)
         {
-            var artist = _artistService.GetArtistById(id, this.User.GetId());
+            var artist = _artistService.GetArtistById(id, this.User.Id());
             if (artist == null)
             {
                 return BadRequest();
@@ -57,14 +57,14 @@ namespace ArtPortfolio.Controllers
         
         public IActionResult Follow(int id)
         {
-            _artistService.Follow(id, this.User.GetId());
+            _artistService.Follow(id, this.User.Id());
 
             return RedirectToAction("Profile", "Artists", new {id = id});
         }
 
         public IActionResult Settings()
         {
-            var userId = this.User.GetId();
+            var userId = this.User.Id();
             var artistId = _artistService.GetIdByUser(userId);
             var artist = _artistService.GetArtistById(artistId, userId);
 
@@ -82,7 +82,7 @@ namespace ArtPortfolio.Controllers
         [HttpPost]
         public IActionResult ChangeAvatar(string avatarUrl)
         {
-            var userId = this.User.GetId();
+            var userId = this.User.Id();
             var artistId = _artistService.ChangeAvatar(userId, avatarUrl);
 
             return RedirectToAction("Profile", "Artists", new { id = artistId });
@@ -91,7 +91,7 @@ namespace ArtPortfolio.Controllers
         [HttpPost]
         public IActionResult ChangeName(string name)
         {
-            var userId = this.User.GetId();
+            var userId = this.User.Id();
             var artistId = _artistService.ChangeName(userId, name);
 
             return RedirectToAction("Profile", "Artists", new { id = artistId });
@@ -100,7 +100,7 @@ namespace ArtPortfolio.Controllers
         [HttpPost]
         public IActionResult ChangeDescription(string description)
         {
-            var userId = this.User.GetId();
+            var userId = this.User.Id();
             var artistId = _artistService.ChangeDescription(userId, description);
 
             return RedirectToAction("Profile", "Artists", new { id = artistId });
@@ -109,7 +109,7 @@ namespace ArtPortfolio.Controllers
         [HttpPost]
         public IActionResult ToggleAvailable()
         {
-            var userId = this.User.GetId();
+            var userId = this.User.Id();
             var artistId = _artistService.ToggleAvailable(userId);
 
             return RedirectToAction("Profile", "Artists", new { id = artistId });

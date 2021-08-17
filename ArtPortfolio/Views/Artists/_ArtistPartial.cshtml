@@ -16,7 +16,7 @@
     <div class="font-weight-bold">
         <img class="avatar-sm" src="@Model.AvatarUrl" alt="@Model.Name">
         <a asp-controller="Artists" asp-action="Profile" asp-route-id="@Model.Id" class="card-text">@Model.Name</a>
-        @if (@Model.Id != ArtistService.GetIdByUser(this.User.GetId()))
+        @if (@Model.Id != ArtistService.GetIdByUser(this.User.Id()))
         {
             <a asp-controller="Artists" asp-action="Follow" asp-route-id="@Model.Id" role="button" aria-pressed="@(Model.IsFollowed ? "true" : "false")" class="btn btn-outline-info mr-2 mt-2 float-right @(Model.IsFollowed ? "active" : "")">Follow@(Model.IsFollowed ? "ing" : "")</a>
         }

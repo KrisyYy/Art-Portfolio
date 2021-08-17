@@ -1,7 +1,7 @@
 ﻿@model CommentFormModel
 
 <div class="p-3">
-    <form method="post" asp-controller="Artworks" asp-action="Art" asp-route-id="@ViewBag.Id">
+    <form method="post" asp-controller="Comment" asp-action="CreateComment" asp-route-id="@ViewBag.Id">
         <div class="col-10 float-left">
             <label asp-for="Content">Write a reply</label>
             <textarea asp-for="Content" class="form-control" rows="2"></textarea>

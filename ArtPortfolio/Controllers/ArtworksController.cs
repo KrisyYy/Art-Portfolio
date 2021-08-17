@@ -1,10 +1,10 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using ArtPortfolio.Extensions;
 using ArtPortfolio.Models.Artworks;
 using ArtPortfolio.Services.Artists;
 using ArtPortfolio.Services.Artworks;
+using ArtPortfolio.Services.Comments;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 
@@ -15,13 +15,15 @@ namespace ArtPortfolio.Controllers
     {
         private readonly IArtworkService _artworkService;
         private readonly IArtistService _artistService;
+        private readonly ICommentService _commentService;
         private readonly IMapper _mapper;
 
-        public ArtworksController(IArtworkService artworkService, IArtistService artistService, IMapper mapper)
+        public ArtworksController(IArtworkService artworkService, IArtistService artistService, IMapper mapper, ICommentService commentService)
         {
             _artworkService = artworkService;
             _artistService = artistService;
             _mapper = mapper;
+            _commentService = commentService;
         }
 
         public IActionResult Art(int id)
@@ -35,32 +37,22 @@ namespace ArtPortfolio.Controllers
             return View(new ArtViewModel()
             {
                 Artwork = artwork,
-                Comments = _artworkService.GetListOfComments(id),
-                IsLiked = _artworkService.IsLiked(id, this.User.GetId())
+                Comments = _commentService.GetListOfComments(id),
+                IsLiked = _artworkService.IsLiked(id, this.User.Id())
             });
         }
 
-        [HttpPost]
-        public IActionResult Art(int id, CommentFormModel commentModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                var artwork = _artworkService.GetArtworkById(id);
-                if (artwork == null)
-                {
-                    return NotFound();
-                }
-
-                return View(artwork);
-            }
-
-            _artworkService.CreateComment(commentModel.Content, id, this.User.GetId());
-
-            return RedirectToAction("Art", "Artworks", new { id = id });
-        }
 
         public IActionResult Delete(int id)
         {
+            var userId = User.Id();
+            var artistId = _artistService.GetIdByUser(userId);
+
+            if (artistId != _artworkService.ArtistId(id) && !User.IsAdmin())
+            {
+                return Unauthorized();
+            }
+
             var delete = _artworkService.Delete(id);
             if (!delete)
             {
@@ -68,18 +60,6 @@ namespace ArtPortfolio.Controllers
             }
 
             return RedirectToAction("Index", "Home");
-        }
-
-        public IActionResult DeleteComment(int id)
-        {
-            var artId = _artworkService.DeleteComment(id);
-
-            if (artId == -1)
-            {
-                return BadRequest();
-            }
-
-            return RedirectToAction("Art", "Artworks", new { id = artId });
         }
 
 
@@ -108,7 +88,7 @@ namespace ArtPortfolio.Controllers
         
         public IActionResult Create()
         {
-            var userId = this.User.GetId();
+            var userId = this.User.Id();
 
             if (!_artistService.IsArtist(userId))
             {
@@ -121,7 +101,7 @@ namespace ArtPortfolio.Controllers
         [HttpPost]
         public IActionResult Create(ArtCreateModel artModel)
         {
-            var userId = this.User.GetId();
+            var userId = this.User.Id();
             var artistId = _artistService.GetIdByUser(userId);
 
             if (artistId == 0)
@@ -148,9 +128,9 @@ namespace ArtPortfolio.Controllers
 
         public IActionResult Edit(int id)
         {
-            var userId = this.User.GetId();
+            var userId = this.User.Id();
 
-            if (!_artistService.IsArtist(userId))
+            if (!_artistService.IsArtist(userId) && !User.IsAdmin())
             {
                 return RedirectToAction("BecomeArtist", "Artists");
             }
@@ -158,7 +138,7 @@ namespace ArtPortfolio.Controllers
             var artwork = _artworkService.GetArtworkById(id);
             var artistId = _artistService.GetIdByUser(userId);
 
-            if (artwork.ArtistId != artistId)
+            if (artwork.ArtistId != artistId && !User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -171,10 +151,10 @@ namespace ArtPortfolio.Controllers
         [HttpPost]
         public IActionResult Edit(int id, ArtCreateModel artModel)
         {
-            var userId = this.User.GetId();
+            var userId = this.User.Id();
             var artistId = _artistService.GetIdByUser(userId);
 
-            if (artistId == 0)
+            if (artistId == 0 && !User.IsAdmin())
             {
                 return RedirectToAction("BecomeArtist", "Artists");
             }
@@ -182,6 +162,11 @@ namespace ArtPortfolio.Controllers
             if (!ModelState.IsValid)
             {
                 return View(artModel);
+            }
+
+            if (artistId != _artworkService.ArtistId(id) || !User.IsAdmin())
+            {
+                return Unauthorized();
             }
 
             var editArtwork = _artworkService.EditArtwork
@@ -204,7 +189,7 @@ namespace ArtPortfolio.Controllers
 
         public IActionResult Like(int id)
         {
-            _artworkService.Like(id, this.User.GetId());
+            _artworkService.Like(id, this.User.Id());
 
             return RedirectToAction("Art", "Artworks", new { id = id});
         }

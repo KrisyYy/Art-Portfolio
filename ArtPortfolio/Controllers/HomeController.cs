@@ -1,10 +1,7 @@
 ﻿using ArtPortfolio.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using System.Linq;
-using ArtPortfolio.Data;
 using ArtPortfolio.Extensions;
-using ArtPortfolio.Models.Artworks;
 using ArtPortfolio.Models.Home;
 using ArtPortfolio.Services.Artists;
 using ArtPortfolio.Services.Artworks;
@@ -24,7 +21,7 @@ namespace ArtPortfolio.Controllers
 
         public IActionResult Index()
         {
-            var userId = this.User.GetId();
+            var userId = this.User.Id();
             var artworks = _artworkService.ArtworksFromFollowed(userId);
             var artists = _artistService.RecommendedArtists(userId);
 

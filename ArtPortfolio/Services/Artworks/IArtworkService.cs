@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ArtPortfolio.Models.Artworks;
 using ArtPortfolio.Services.Artworks.Models;
 
 namespace ArtPortfolio.Services.Artworks
@@ -8,9 +7,9 @@ namespace ArtPortfolio.Services.Artworks
     {
         ArtworkServiceModel GetArtworkById(int id);
 
-        bool IsLiked(int id, string userId);
+        int ArtistId(int artId);
 
-        List<CommentViewModel> GetListOfComments(int id);
+        bool IsLiked(int id, string userId);
 
         int CreateArtwork(string title, string description, string imageUrl, int artistId);
 
@@ -25,9 +24,5 @@ namespace ArtPortfolio.Services.Artworks
         void View(int id);
 
         bool Delete(int id);
-
-        int DeleteComment(int id);
-
-        void CreateComment(string content, int artworkId, string userId);
     }
 }

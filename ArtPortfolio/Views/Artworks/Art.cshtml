@@ -5,6 +5,7 @@
 
     var artwork = Model.Artwork;
     ViewBag.Id = artwork.Id;
+    var isAdmin = User.IsAdmin();
 }
 
 
@@ -21,9 +22,9 @@
                 <p class="card-text">@artwork.Description</p>
             </div>
             <div class="mt-4 pl-5 pr-5">
-                <div class="container">
+                <div class="container mb-2">
                     <a asp-controller="Artworks" asp-action="Like" asp-route-id="@artwork.Id" role="button" class="btn btn-outline-info @(Model.IsLiked ? "active" : "")" aria-pressed="@(Model.IsLiked ? "true" : "false")">Like@(Model.IsLiked ? "d" : "")</a>
-                    @if (artwork.ArtistId == _artistService.GetIdByUser(this.User.GetId()))
+                    @if (artwork.ArtistId == _artistService.GetIdByUser(this.User.Id()) || isAdmin)
                     {
                         <a asp-controller="Artworks" asp-action="Delete" asp-route-id="@artwork.Id" role="button" class="btn btn-outline-info float-right m-1">Delete</a>
                         <a asp-controller="Artworks" asp-action="Edit" asp-route-id="@artwork.Id" role="button" class="btn btn-outline-info float-right m-1">Edit</a>

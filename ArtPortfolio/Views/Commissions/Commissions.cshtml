@@ -4,21 +4,27 @@
     ViewData["Title"] = "My Commissions";
 }
 
-<div class="row">
+<div class="container p-3">
     <div class="offset-lg-2 col-lg-8 offset-md-1 col-md-10 col-sm-12">
-        <h1 class="title-margin">My Commissions</h1>
-        <div class="container mb-5" id="active">
-            <h3 class="card-title">Active</h3>
-            @foreach (var comm in @Model.Where(c => !c.IsComplete))
+        <h1 class="title-margin text-center">My Commissions</h1>
+        <div class="container mb-5 p-3">
+            @if (Model.Any(c => !c.IsComplete))
             {
-                <partial name="_CommPartial" model="comm"/>
+                <h3 class="card-title">Active</h3>
+                @foreach (var comm in @Model.Where(c => !c.IsComplete))
+                {
+                    <partial name="_CommPartial" model="comm"/>
+                }
             }
         </div>
-        <div class="container" id="resolved">
-            <h3 class="card-title">Finished</h3>
-            @foreach (var comm in @Model.Where(c => c.IsComplete))
+        <div class="container p-3">
+            @if (Model.Any(c => c.IsComplete))
             {
-                <partial name="_CommPartial" model="comm" />
+                <h3 class="card-title">Finished</h3>
+                @foreach (var comm in @Model.Where(c => c.IsComplete))
+                {
+                    <partial name="_CommPartial" model="comm" />
+                }
             }
         </div>
     </div>

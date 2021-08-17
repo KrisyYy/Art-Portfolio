@@ -3,9 +3,11 @@ using ArtPortfolio.Data.Models;
 using ArtPortfolio.Extensions;
 using ArtPortfolio.Services.Artists;
 using ArtPortfolio.Services.Artworks;
+using ArtPortfolio.Services.Comments;
 using ArtPortfolio.Services.Commissions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -38,6 +40,7 @@ namespace ArtPortfolio
                     options.Password.RequireUppercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                 })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ArtPortfolioDbContext>();
 
             services.AddAutoMapper(typeof(Startup));
@@ -47,9 +50,10 @@ namespace ArtPortfolio
                 options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
             });
 
-            services.AddTransient<IArtworkService, ArtworkService>()
-                .AddTransient<IArtistService, ArtistService>()
-                .AddTransient<ICommissionService, CommissionService>(); ;
+            services.AddTransient<IArtworkService, ArtworkService>();
+            services.AddTransient<IArtistService, ArtistService>();
+            services.AddTransient<ICommissionService, CommissionService>();
+            services.AddTransient<ICommentService, CommentService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

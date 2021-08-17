@@ -8,15 +8,17 @@
     ViewData["Title"] = title;
 }
 
-<h1 class="title-margin">@title</h1>
-@if (!artworks.Any())
-{
-    <p>No artworks yet</p>
-}
-<div class="row">
-    @foreach (var art in artworks)
+<div class="container p-3">
+    <h1 class="title-margin text-center">@title</h1>
+    @if (!artworks.Any())
     {
-        <partial name="_ArtPartial" model="@art" />
+        <p>No artworks yet</p>
     }
+    <div class="row">
+        @foreach (var art in artworks)
+        {
+            <partial name="_ArtPartial" model="@art" />
+        }
+    </div>
 </div>
 
