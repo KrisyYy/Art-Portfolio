@@ -77,13 +77,17 @@ namespace ArtPortfolio.Tests.Controllers
             var artController = Controller();
 
             // Act
-            var result = artController.Like(artId);
+            var result1 = artController.Like(artId);
+            var result2 = artController.Like(0);
 
             // Assert
-            Assert.NotNull(result);
-            var view = Assert.IsType<RedirectToActionResult>(result);
+            Assert.NotNull(result1);
+            var view = Assert.IsType<RedirectToActionResult>(result1);
             Assert.Equal("Art", view.ActionName);
             Assert.Equal("Artworks", view.ControllerName);
+
+            Assert.NotNull(result2);
+            Assert.IsType<BadRequestResult>(result2);
         }
 
 

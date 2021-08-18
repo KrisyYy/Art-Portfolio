@@ -14,6 +14,8 @@ namespace ArtPortfolio.Tests.Services
         private const int artistId = 10;
         private const string userId = "User Id";
 
+
+
         [Fact]
         public void ArtistIdShouldReturnCurrentArtworksArtistId()
         {

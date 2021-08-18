@@ -67,6 +67,10 @@ namespace ArtPortfolio.Controllers
 
         public IActionResult Follow(int id)
         {
+            if (!_artistService.IsArtist(id))
+            {
+                return BadRequest();
+            }
             _artistService.Follow(id, this.User.Id());
 
             return RedirectToAction("Profile", "Artists", new {id = id});

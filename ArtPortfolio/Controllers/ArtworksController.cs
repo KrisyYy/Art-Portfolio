@@ -201,6 +201,10 @@ namespace ArtPortfolio.Controllers
 
         public IActionResult Like(int id)
         {
+            if (_artworkService.GetArtworkById(id) == null)
+            {
+                return BadRequest();
+            }
             _artworkService.Like(id, this.User.Id());
 
             return RedirectToAction("Art", "Artworks", new { id = id});

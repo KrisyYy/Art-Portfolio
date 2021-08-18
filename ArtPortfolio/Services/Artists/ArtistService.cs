@@ -62,6 +62,7 @@ namespace ArtPortfolio.Services.Artists
         public ArtistViewModel GetArtistById(int id, string userId)
         {
             return _data.Artists
+                .ToArray()
                 .Where(a => a.Id == id)
                 .Select(a => new ArtistViewModel()
                 {
@@ -81,7 +82,7 @@ namespace ArtPortfolio.Services.Artists
                         ImageUrl = ar.ImageUrl,
                         Likes = ar.Likes.Count
                     }).ToList()
-                }).First();
+                }).FirstOrDefault();
         }
 
 
