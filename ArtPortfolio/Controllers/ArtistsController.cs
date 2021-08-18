@@ -16,16 +16,24 @@ namespace ArtPortfolio.Controllers
             _artistService = artistService;
         }
         
+
+
         public IActionResult BecomeArtist()
         {
+            if (_artistService.IsArtist(this.User.Id()))
+            {
+                return BadRequest();
+            }
+
             return View();
         }
+
 
         [HttpPost]
         public IActionResult BecomeArtist(BecomeArtistFormModel artistModel)
         {
-            var currentUserId = this.User.Id();
-            if (_artistService.IsArtist(currentUserId))
+            var userId = this.User.Id();
+            if (_artistService.IsArtist(userId))
             {
                 return BadRequest();
             }
@@ -37,13 +45,14 @@ namespace ArtPortfolio.Controllers
             var artistId = _artistService.CreateArtist
             (
                 artistModel.Name, 
-                artistModel.Description, 
-                currentUserId
+                artistModel.Description,
+                userId
             );
 
             return RedirectToAction("Profile", "Artists", new {id = artistId});
         }
         
+
         public IActionResult Profile(int id)
         {
             var artist = _artistService.GetArtistById(id, this.User.Id());
@@ -55,6 +64,7 @@ namespace ArtPortfolio.Controllers
             return View(artist);
         }
         
+
         public IActionResult Follow(int id)
         {
             _artistService.Follow(id, this.User.Id());
@@ -62,10 +72,17 @@ namespace ArtPortfolio.Controllers
             return RedirectToAction("Profile", "Artists", new {id = id});
         }
 
+
         public IActionResult Settings()
         {
             var userId = this.User.Id();
             var artistId = _artistService.GetIdByUser(userId);
+
+            if (artistId == 0)
+            {
+                RedirectToAction("BecomeArtist", "Artists");
+            }
+
             var artist = _artistService.GetArtistById(artistId, userId);
 
             var data = new SettingsFormModel()
@@ -79,38 +96,24 @@ namespace ArtPortfolio.Controllers
             return View(data);
         }
 
-        [HttpPost]
-        public IActionResult ChangeAvatar(string avatarUrl)
-        {
-            var userId = this.User.Id();
-            var artistId = _artistService.ChangeAvatar(userId, avatarUrl);
-
-            return RedirectToAction("Profile", "Artists", new { id = artistId });
-        }
 
         [HttpPost]
-        public IActionResult ChangeName(string name)
+        public IActionResult EditProfile(string change = "", string name = "", string avatarUrl = "", string description = "")
         {
             var userId = this.User.Id();
-            var artistId = _artistService.ChangeName(userId, name);
+            var artistId = _artistService.GetIdByUser(userId);
 
-            return RedirectToAction("Profile", "Artists", new { id = artistId });
-        }
+            if (artistId == 0)
+            {
+                RedirectToAction("BecomeArtist", "Artists");
+            }
 
-        [HttpPost]
-        public IActionResult ChangeDescription(string description)
-        {
-            var userId = this.User.Id();
-            var artistId = _artistService.ChangeDescription(userId, description);
 
-            return RedirectToAction("Profile", "Artists", new { id = artistId });
-        }
-
-        [HttpPost]
-        public IActionResult ToggleAvailable()
-        {
-            var userId = this.User.Id();
-            var artistId = _artistService.ToggleAvailable(userId);
+            var success = _artistService.EditProfile(artistId, change, name, avatarUrl, description);
+            if (!success)
+            {
+                return BadRequest();
+            }
 
             return RedirectToAction("Profile", "Artists", new { id = artistId });
         }

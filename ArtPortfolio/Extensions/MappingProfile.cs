@@ -1,6 +1,8 @@
 ﻿using ArtPortfolio.Data.Models;
 using ArtPortfolio.Models.Artworks;
+using ArtPortfolio.Models.Commissions;
 using ArtPortfolio.Services.Artworks.Models;
+using ArtPortfolio.Services.Commissions.Models;
 using AutoMapper;
 
 namespace ArtPortfolio.Extensions
@@ -17,6 +19,10 @@ namespace ArtPortfolio.Extensions
                 .ForMember(c => c.Username, cfg => cfg.MapFrom(c => c.User.UserName));
 
             this.CreateMap<ArtworkServiceModel, ArtCreateModel>();
+
+            this.CreateMap<Commission, CommissionServiceModel>();
+
+            this.CreateMap<Prop, PropInfoViewModel>();
         }
     }
 }

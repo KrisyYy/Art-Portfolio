@@ -4,17 +4,30 @@ using ArtPortfolio.Data;
 using ArtPortfolio.Data.Models;
 using ArtPortfolio.Data.Models.Enums;
 using ArtPortfolio.Models.Commissions;
+using ArtPortfolio.Services.Commissions.Models;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 namespace ArtPortfolio.Services.Commissions
 {
     public class CommissionService : ICommissionService
     {
         private readonly ArtPortfolioDbContext _data;
+        private readonly IMapper _mapper;
 
-        public CommissionService(ArtPortfolioDbContext data)
+        public CommissionService(ArtPortfolioDbContext data, IMapper mapper)
         {
             _data = data;
+            _mapper = mapper;
         }
+
+
+
+        public int ArtistId(int commId)
+        {
+            return _data.Commissions.Find(commId).ArtistId;
+        }
+
 
         public int Create(string title, string noteFromClient, int commissionType, int sceneryType, bool isPrivate, bool isForCommercialUse, int artistId, decimal price)
         {
@@ -36,6 +49,7 @@ namespace ArtPortfolio.Services.Commissions
             return commission.Id;
         }
 
+
         public int AddProp(string name, int quantity, string description, int commissionId)
         {
             var prop = new Prop()
@@ -52,39 +66,24 @@ namespace ArtPortfolio.Services.Commissions
             return prop.Id;
         }
 
-        public CommissionInfoViewModel GetCommission(int id)
+
+        public CommissionServiceModel GetCommissionById(int id)
         {
-            var commission = _data.Commissions.FirstOrDefault(c => c.Id == id);
-            if (commission == null)
-            {
-                return null;
-            }
-
-            var props = _data.Props.Where(p => p.CommissionId == commission.Id);
-
-            var commissionData = new CommissionInfoViewModel()
-            {
-                Id = commission.Id,
-                Title = commission.Title,
-                CommissionType = (int) commission.CommissionType,
-                SceneryType = (int) commission.SceneryType,
-                IsForCommercialUse = commission.IsForCommercialUse,
-                IsPrivate = commission.IsPrivate,
-                NoteFromClient = commission.NoteFromClient,
-                Price = commission.Price,
-                Status = (int) commission.Status,
-                ArtistId = commission.ArtistId,
-                Props = props.Select(p => new PropInfoViewModel()
-                {
-                    Name = p.Name,
-                    Quantity = p.Quantity,
-                    Description = p.Description,
-                    CommissionId = commission.Id
-                }).ToList()
-            };
-
-            return commissionData;
+            return _data.Commissions
+                .Where(c => c.Id == id)
+                .ProjectTo<CommissionServiceModel>(_mapper.ConfigurationProvider)
+                .FirstOrDefault();
         }
+
+
+        public List<PropInfoViewModel> GetProps(int id)
+        {
+            return _data.Props
+                .Where(p => p.CommissionId == id)
+                .ProjectTo<PropInfoViewModel>(_mapper.ConfigurationProvider)
+                .ToList();
+        }
+
 
         public void UpdateCommission(int id, int status)
         {
@@ -97,6 +96,7 @@ namespace ArtPortfolio.Services.Commissions
 
             _data.SaveChanges();
         }
+
 
         public List<CommissionListingViewModel> GetListOfCommissions(int id)
         {

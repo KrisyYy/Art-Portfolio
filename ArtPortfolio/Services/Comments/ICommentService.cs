@@ -11,6 +11,10 @@ namespace ArtPortfolio.Services.Comments
 
         int DeleteComment(int id);
 
-        void CreateComment(string content, int artworkId, string userId);
+        void CreateComment(
+            string content,
+            int artworkId,
+            string userId
+            );
     }
 }

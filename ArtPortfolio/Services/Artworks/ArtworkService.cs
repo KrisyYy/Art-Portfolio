@@ -21,11 +21,15 @@ namespace ArtPortfolio.Services.Artworks
         }
 
 
+
         public ArtworkServiceModel GetArtworkById(int id)
-            => _data.Artworks
+        {
+            return _data.Artworks
                 .Where(a => a.Id == id)
                 .ProjectTo<ArtworkServiceModel>(_mapper.ConfigurationProvider)
                 .FirstOrDefault();
+        }
+
 
         public int ArtistId(int artId)
         {
@@ -34,7 +38,9 @@ namespace ArtPortfolio.Services.Artworks
 
 
         public bool IsLiked(int id, string userId)
-            => _data.Likes.Any(l => l.UserId == userId && l.ArtworkId == id);
+        {
+            return _data.Likes.Any(l => l.UserId == userId && l.ArtworkId == id);
+        }
 
 
         public int CreateArtwork(string title, string description, string imageUrl, int artistId)
@@ -114,6 +120,7 @@ namespace ArtPortfolio.Services.Artworks
             };
         }
 
+
         public List<ArtworkServiceModel> ArtworksFromFollowed(string userId)
         {
             return GetArtworks(_data.Artworks
@@ -171,8 +178,10 @@ namespace ArtPortfolio.Services.Artworks
 
 
         private List<ArtworkServiceModel> GetArtworks(IQueryable<Artwork> artworks)
-            => artworks
+        {
+            return artworks
                 .ProjectTo<ArtworkServiceModel>(_mapper.ConfigurationProvider)
                 .ToList();
+        }
     }
 }

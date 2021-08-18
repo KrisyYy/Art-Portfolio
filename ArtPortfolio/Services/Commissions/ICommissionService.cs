@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using ArtPortfolio.Models.Commissions;
+using ArtPortfolio.Services.Commissions.Models;
 
 namespace ArtPortfolio.Services.Commissions
 {
     public interface ICommissionService
     {
+        int ArtistId(int commId);
+
         int Create(
             string title,
             string noteFromClient,
@@ -23,7 +26,9 @@ namespace ArtPortfolio.Services.Commissions
             int commissionId
             );
 
-        CommissionInfoViewModel GetCommission(int id);
+        CommissionServiceModel GetCommissionById(int id);
+
+        List<PropInfoViewModel> GetProps(int id);
 
         void UpdateCommission(int id, int status);
 

@@ -19,10 +19,7 @@ namespace ArtPortfolio.Services.Comments
             _mapper = mapper;
         }
 
-        public string Username(string id)
-        {
-            return _data.Users.Find(id).UserName;
-        }
+
 
         public string UserId(int commentId)
         {
@@ -31,7 +28,9 @@ namespace ArtPortfolio.Services.Comments
 
 
         public List<CommentViewModel> GetListOfComments(int id)
-            => GetComments(_data.Comments.Where(c => c.ArtworkId == id));
+        {
+            return GetComments(_data.Comments.Where(c => c.ArtworkId == id));
+        }
 
 
         public int DeleteComment(int id)
@@ -67,8 +66,10 @@ namespace ArtPortfolio.Services.Comments
 
 
         private List<CommentViewModel> GetComments(IQueryable<Comment> comments)
-            => comments
+        {
+            return comments
                 .ProjectTo<CommentViewModel>(_mapper.ConfigurationProvider)
                 .ToList();
+        }
     }
 }

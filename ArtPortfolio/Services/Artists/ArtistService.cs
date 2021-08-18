@@ -17,20 +17,25 @@ namespace ArtPortfolio.Services.Artists
             _data = data;
         }
 
+
+
         public bool IsArtist(string id)
         {
             return _data.Artists.Any(a => a.UserId == id);
         }
+
 
         public int GetIdByUser(string id)
         {
             return _data.Artists.Where(a => a.UserId == id).Select(a => a.Id).FirstOrDefault();
         }
 
+
         public string GetName(int id)
         {
             return _data.Artists.Where(a => a.Id == id).Select(a => a.Name).FirstOrDefault();
         }
+
 
         public int CreateArtist(string name, string description, string userId)
         {
@@ -47,6 +52,7 @@ namespace ArtPortfolio.Services.Artists
             return artist.Id;
         }
 
+
         public ArtistViewModel GetArtistById(int id, string userId)
         {
             return _data.Artists
@@ -59,7 +65,7 @@ namespace ArtPortfolio.Services.Artists
                     AvailableToCommission = a.AvailableToCommission,
                     Description = a.Description,
                     Followers = a.Follows.Count,
-                    IsFollowed = _data.Follows.Any(ar => ar.ArtistId == id && ar.UserId == userId),
+                    IsFollowed = _data.Follows.Any(f => f.ArtistId == id && f.UserId == userId),
                     Artworks = a.Artworks.Select(ar => new ArtworkServiceModel()
                     {
                         Id = ar.Id,
@@ -71,6 +77,7 @@ namespace ArtPortfolio.Services.Artists
                     }).ToList()
                 }).First();
         }
+
 
         public List<ArtistListingViewModel> RecommendedArtists(string userId)
         {
@@ -90,9 +97,13 @@ namespace ArtPortfolio.Services.Artists
                         {
                             Id = ar.Id,
                             ImageUrl = ar.ImageUrl
-                        }).Take(3).ToList()
+                        })
+                        .Take(3)
+                        .ToList()
                 }).ToList();
         }
+
+
 
         public void Follow(int id, string userId)
         {
@@ -108,45 +119,52 @@ namespace ArtPortfolio.Services.Artists
                 ArtistId = id,
                 UserId = userId
             };
+
             _data.Follows.Add(follow);
             _data.SaveChanges();
         }
 
-        public int ChangeAvatar(string userId, string avatarUrl)
+
+        public bool EditProfile(int id, string change, string name, string avatarUrl, string description)
         {
-            var artistId = GetIdByUser(userId);
-            _data.Artists.FirstOrDefault(a => a.Id == artistId).AvatarUrl = avatarUrl;
+            var artist = _data.Artists.FirstOrDefault(a => a.Id == id);
+            if (artist == null)
+            {
+                return false;
+            }
+
+            switch (change)
+            {
+                case "Name":
+                    if (string.IsNullOrWhiteSpace(name))
+                    {
+                        name = "My name";
+                    }
+                    artist.Name = name;
+                    break;
+                case "AvatarUrl":
+                    if (string.IsNullOrWhiteSpace(avatarUrl))
+                    {
+                        avatarUrl = "https://i.imgur.com/rtrF2Ih.jpg";
+                    }
+                    artist.AvatarUrl = avatarUrl;
+                    break;
+                case "Description":
+                    if (string.IsNullOrWhiteSpace(description))
+                    {
+                        description = "Hello world!";
+                    }
+                    artist.Description = description;
+                    break;
+                case "AvailableToCommission":
+                    artist.AvailableToCommission = !artist.AvailableToCommission;
+                    break;
+                default: return false;
+            }
+
             _data.SaveChanges();
 
-            return artistId;
-        }
-
-        public int ChangeName(string userId, string name)
-        {
-            var artistId = GetIdByUser(userId);
-            _data.Artists.FirstOrDefault(a => a.Id == artistId).Name = name;
-            _data.SaveChanges();
-
-            return artistId;
-        }
-
-        public int ChangeDescription(string userId, string description)
-        {
-            var artistId = GetIdByUser(userId);
-            _data.Artists.FirstOrDefault(a => a.Id == artistId).Description = description;
-            _data.SaveChanges();
-
-            return artistId;
-        }
-
-        public int ToggleAvailable(string userId)
-        {
-            var artistId = GetIdByUser(userId);
-            var artist = _data.Artists.FirstOrDefault(a => a.Id == artistId);
-            artist.AvailableToCommission = !artist.AvailableToCommission;
-            _data.SaveChanges();
-
-            return artistId;
+            return true;
         }
     }
 }

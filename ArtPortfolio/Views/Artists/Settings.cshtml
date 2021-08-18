@@ -18,7 +18,7 @@
                 </div>
                 <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                     <div class="card-body">
-                        <form method="post" asp-action="ChangeAvatar">
+                        <form method="post" asp-action="EditProfile" asp-route-change="AvatarUrl">
                             <div class="form-group">
                                 <label asp-for="AvatarUrl"></label>
                                 <input asp-for="AvatarUrl" class="form-control" placeholder="@Model.AvatarUrl">
@@ -40,7 +40,7 @@
                 </div>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                     <div class="card-body">
-                        <form method="post" asp-action="ChangeName">
+                        <form method="post" asp-action="EditProfile" asp-route-change="Name">
                             <div class="form-group">
                                 <label asp-for="Name"></label>
                                 <input asp-for="Name" class="form-control" placeholder="@Model.Name">
@@ -62,7 +62,7 @@
                 </div>
                 <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
                     <div class="card-body">
-                        <form method="post" asp-action="ChangeDescription">
+                        <form method="post" asp-action="EditProfile" asp-route-change="Description">
                             <div class="form-group">
                                 <label asp-for="Description"></label>
                                 <textarea asp-for="Description" class="form-control" placeholder="@Model.Description" rows="3"></textarea>
@@ -84,7 +84,7 @@
                 </div>
                 <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
                     <div class="card-body">
-                        <form method="post" asp-action="ToggleAvailable">
+                        <form method="post" asp-action="EditProfile" asp-route-change="AvailableToCommission">
                             <button type="submit" class="btn btn-primary">@(Model.AvailableToCommission ? "Close" : "Open") Commissions</button>
                         </form>
                     </div>
@@ -93,3 +93,8 @@
         </div>
     </div>
 </div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

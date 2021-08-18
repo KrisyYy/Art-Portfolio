@@ -2,6 +2,9 @@
 @inject IArtistService ArtistService
 @{
     ViewData["Title"] = "Info";
+
+    var commission = Model.Commission;
+    var props = Model.Props;
 }
 
 
@@ -9,24 +12,25 @@
     <div class="card col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-sm-12">
         <div class="container pb-5">
             <div class="card-body">
-                <h1 class="card-title">@Model.Title</h1>
-                <h4 class="card-subtitle text-muted">by @ViewBag.ArtistName</h4>
-                @if (Model.IsForCommercialUse)
+                <div class="title-margin">
+                    <h1 class="card-title">@commission.Title</h1>
+                    @if (commission.IsForCommercialUse)
+                    {
+                        <span class="badge badge-secondary">Commercial</span>
+                    }
+                    @if (commission.IsPrivate)
+                    {
+                        <span class="badge badge-secondary">Private</span>
+                    }
+                </div>
+                @if (ArtistService.GetIdByUser(this.User.Id()) == commission.ArtistId)
                 {
-                    <span class="badge badge-secondary">Commercial</span>
-                }
-                @if (Model.IsPrivate)
-                {
-                    <span class="badge badge-secondary">Private</span>
-                }
-                @if (ArtistService.GetIdByUser(this.User.Id()) == Model.ArtistId)
-                {
-                    <form method="post" asp-controller="Commissions" asp-action="UpdateCommission" asp-route-id="@Model.Id">
+                    <form method="post" asp-controller="Commissions" asp-action="UpdateCommission" asp-route-id="@commission.Id">
                         <div class="col-4 float-right">
-                            <label asp-for="Status">
+                            <label asp-for="Commission.Status">
                                 Update Status
                             </label>
-                            <select asp-for="Status" class="form-control" style="border-color: #17a2b8;" id="exampleFormControlSelect1">
+                            <select asp-for="Commission.Status" class="form-control" style="border-color: #17a2b8;" id="exampleFormControlSelect1">
                                 @foreach (int option in Enum.GetValues(typeof(Status)))
                                 {
                                     <option value="@option">@((Status) option)</option>
@@ -39,30 +43,36 @@
             </div>
             <div class="container">
                 <div class="mb-4 mt-3">
-                    <h5><small class="card w-25 border-info text-center p-2">Status: @((Status) Model.Status)</small></h5>
+                    <h5><small class="card w-25 border-info text-center p-2">Status: @((Status)commission.Status)</small></h5>
                 </div>
                 <h3 class="card-title">Info</h3>
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-subtitle">Commission type</h5>
-                        <p class="card-text">@((CommissionType) Model.CommissionType)</p>
+                        <p class="card-text">@((CommissionType)commission.CommissionType)</p>
                         <h5 class="card-subtitle">Scenery type</h5>
-                        <p class="card-text">@((SceneryType) Model.SceneryType)</p>
+                        <p class="card-text">@((SceneryType)commission.SceneryType)</p>
 
-                        <h5 class="card-subtitle p-2">Note from Client</h5>
-                        <p class="card-text card p-2 col-8">@Model.NoteFromClient</p>
-                    </div>
-                    <div class="card-body">
-                        @foreach (var prop in Model.Props)
+                        @if (commission.NoteFromClient != null)
                         {
-                            <div class="card card-body col-8">
-                                <h5 class="card-title">@prop.Name<small class="float-right badge badge-info">Quantity @prop.Quantity</small></h5>
-                                <p class="card-text">@prop.Description</p>
-                            </div>
+                            <h5 class="card-subtitle p-2">Note from Client</h5>
+                            <p class="card-text card p-2 col-8">@commission.NoteFromClient</p>
                         }
                     </div>
+                    @if (props.Any())
+                    {
+                        <div class="card-body">
+                            @foreach (var prop in Model.Props)
+                            {
+                                <div class="card card-body col-8">
+                                    <h5 class="card-title">@prop.Name<small class="float-right badge badge-info">Quantity @prop.Quantity</small></h5>
+                                    <p class="card-text">@prop.Description</p>
+                                </div>
+                            }
+                        </div>
+                    }
                     <div class="card-body">
-                        <h5 class="card-title">Total price: @($"{Model.Price:00}") EUR.</h5>
+                        <h5 class="card-title">Total price: @($"{commission.Price:00}") EUR.</h5>
                     </div>
                 </div>
             </div>

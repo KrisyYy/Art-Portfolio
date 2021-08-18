@@ -26,6 +26,8 @@ namespace ArtPortfolio.Controllers
             _commentService = commentService;
         }
 
+
+
         public IActionResult Art(int id)
         {
             var artwork = _artworkService.GetArtworkById(id);
@@ -73,16 +75,17 @@ namespace ArtPortfolio.Controllers
             return View(artModel);
         }
         
+
         public IActionResult Artworks(int id)
         {
-            var data = _artworkService.GetListOfArtworks();
-            data.Artworks = data.Artworks
+            var artData = _artworkService.GetListOfArtworks();
+            artData.Artworks = artData.Artworks
                 .Where(a => a.ArtistId == id)
                 .ToList();
 
             ViewBag.ArtistId = id;
 
-            return View(data);
+            return View(artData);
         }
 
         
@@ -97,6 +100,7 @@ namespace ArtPortfolio.Controllers
 
             return View();
         }
+
 
         [HttpPost]
         public IActionResult Create(ArtCreateModel artModel)
@@ -147,6 +151,7 @@ namespace ArtPortfolio.Controllers
 
             return View(artForm);
         }
+
 
         [HttpPost]
         public IActionResult Edit(int id, ArtCreateModel artModel)

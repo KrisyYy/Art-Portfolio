@@ -11,7 +11,11 @@ namespace ArtPortfolio.Services.Artists
 
         string GetName(int id);
 
-        int CreateArtist(string name, string description, string userId);
+        int CreateArtist(
+            string name, 
+            string description, 
+            string userId
+            );
 
         ArtistViewModel GetArtistById(int id, string userId);
 
@@ -19,13 +23,13 @@ namespace ArtPortfolio.Services.Artists
 
         void Follow(int id, string userId);
 
-        int ChangeAvatar(string userId, string avatarUrl);
-
-        int ChangeName(string userId, string name);
-
-        int ChangeDescription(string userId, string description);
-
-        int ToggleAvailable(string userId);
+        bool EditProfile(
+            int id, 
+            string change, 
+            string name, 
+            string avatarUrl, 
+            string description
+            );
 
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using ArtPortfolio.Data.Models;
-using ArtPortfolio.Data.Models.Enums;
+﻿using ArtPortfolio.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using ArtPortfolio.Models.Commissions;
 using ArtPortfolio.Services.Artists;
@@ -22,18 +19,21 @@ namespace ArtPortfolio.Controllers
             _commissionService = commissionService;
         }
         
+
+
         public IActionResult Info(int id)
         {
-            var data = _commissionService.GetCommission(id);
-            if (data == null)
+            var commission = _commissionService.GetCommissionById(id);
+            if (commission == null)
             {
                 return BadRequest();
             }
 
-            var artistName = _artistService.GetName(data.ArtistId);
-            ViewBag.ArtistName = artistName;
-
-            return View(data);
+            return View(new CommissionInfoViewModel()
+            {
+                Commission = commission,
+                Props = _commissionService.GetProps(id)
+            });
         }
         
 
@@ -44,6 +44,7 @@ namespace ArtPortfolio.Controllers
             ViewBag.ArtistId = id;
             return View();
         }
+
 
         [HttpPost]
         public IActionResult NewCommission(CommissionRequestFormModel requestModel)
@@ -80,16 +81,30 @@ namespace ArtPortfolio.Controllers
             return RedirectToAction("Info", "Commissions", new {id = commId});
         }
 
+
         public IActionResult Commissions(int id)
         {
+            if (!_artistService.IsArtist(User.Id()))
+            {
+                return RedirectToAction("BecomeArtist", "Artists");
+            }
+
             var data = _commissionService.GetListOfCommissions(id);
 
             return View(data);
         }
 
+
         [HttpPost]
         public IActionResult UpdateCommission(int id, int status)
         {
+            var artistId = _artistService.GetIdByUser(User.Id());
+
+            if (_commissionService.ArtistId(id) != artistId)
+            {
+                return Unauthorized();
+            }
+
             _commissionService.UpdateCommission(id, status);
 
             return RedirectToAction("Info", "Commissions", new { id = id });
