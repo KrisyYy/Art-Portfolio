@@ -89,6 +89,7 @@ namespace ArtPortfolio.Services.Artists
         {
             return _data.Artists
                 .Where(a => a.Artworks.Count >= 3 && a.UserId != userId)
+                .ToArray()
                 .OrderByDescending(a => a.Follows.Count)
                 .Take(3)
                 .Select(a => new ArtistListingViewModel()
