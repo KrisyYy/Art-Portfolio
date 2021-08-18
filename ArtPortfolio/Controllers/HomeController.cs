@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using ArtPortfolio.Models;
+﻿using ArtPortfolio.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using ArtPortfolio.Extensions;
-using ArtPortfolio.Models.Artists;
 using ArtPortfolio.Models.Home;
 using ArtPortfolio.Services.Artists;
 using ArtPortfolio.Services.Artworks;

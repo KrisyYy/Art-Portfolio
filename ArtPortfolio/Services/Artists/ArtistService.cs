@@ -62,7 +62,6 @@ namespace ArtPortfolio.Services.Artists
         public ArtistViewModel GetArtistById(int id, string userId)
         {
             return _data.Artists
-                .ToArray()
                 .Where(a => a.Id == id)
                 .Select(a => new ArtistViewModel()
                 {
@@ -90,7 +89,6 @@ namespace ArtPortfolio.Services.Artists
         {
             return _data.Artists
                 .Where(a => a.Artworks.Count >= 3 && a.UserId != userId)
-                .ToArray()
                 .OrderByDescending(a => a.Follows.Count)
                 .Take(3)
                 .Select(a => new ArtistListingViewModel()

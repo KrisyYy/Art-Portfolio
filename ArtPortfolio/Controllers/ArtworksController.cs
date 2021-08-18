@@ -176,7 +176,7 @@ namespace ArtPortfolio.Controllers
                 return View(artModel);
             }
 
-            if (artistId != _artworkService.ArtistId(id) || !User.IsAdmin())
+            if (artistId != _artworkService.ArtistId(id) && !User.IsAdmin())
             {
                 return Unauthorized();
             }
