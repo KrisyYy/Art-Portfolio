@@ -88,6 +88,41 @@ namespace ArtPortfolio
                         defaults: new { controller = "Artworks", action = "All" });
 
                     endpoints.MapControllerRoute(
+                        name: "profile",
+                        pattern: "profile/{id}",
+                        defaults: new { controller = "Artists", action = "Profile" });
+
+                    endpoints.MapControllerRoute(
+                        name: "art",
+                        pattern: "art/{id}",
+                        defaults: new { controller = "Artworks", action = "Art" });
+
+                    endpoints.MapControllerRoute(
+                        name: "artworks",
+                        pattern: "artworks/{id}",
+                        defaults: new { controller = "Artworks", action = "Artworks" });
+
+                    endpoints.MapControllerRoute(
+                        name: "commissions",
+                        pattern: "commissions/{id}",
+                        defaults: new { controller = "Commissions", action = "Commissions" });
+
+                    endpoints.MapControllerRoute(
+                        name: "settings",
+                        pattern: "settings",
+                        defaults: new { controller = "Artists", action = "Settings" });
+
+                    endpoints.MapControllerRoute(
+                        name: "commission",
+                        pattern: "commission/{id}",
+                        defaults: new { controller = "Commissions", action = "Info" });
+
+                    endpoints.MapControllerRoute(
+                        name: "request",
+                        pattern: "request/{id}",
+                        defaults: new { controller = "Commissions", action = "NewCommission" });
+
+                    endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();

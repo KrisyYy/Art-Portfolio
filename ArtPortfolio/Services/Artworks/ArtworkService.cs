@@ -33,7 +33,13 @@ namespace ArtPortfolio.Services.Artworks
 
         public int ArtistId(int artId)
         {
-            return _data.Artworks.Find(artId).ArtistId;
+            var artwork = _data.Artworks.Find(artId);
+            if (artwork == null)
+            {
+                return 0;
+            }
+
+            return artwork.ArtistId;
         }
 
 

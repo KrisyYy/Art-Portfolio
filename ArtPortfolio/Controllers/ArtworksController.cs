@@ -36,6 +36,9 @@ namespace ArtPortfolio.Controllers
                 return NotFound();
             }
 
+            // TODO: not call if user was redirected to this page
+            _artworkService.View(id);
+
             return View(new ArtViewModel()
             {
                 Artwork = artwork,
@@ -78,6 +81,10 @@ namespace ArtPortfolio.Controllers
 
         public IActionResult Artworks(int id)
         {
+            if (!_artistService.IsArtist(id))
+            {
+                return NotFound();
+            }
             var artData = _artworkService.GetListOfArtworks();
             artData.Artworks = artData.Artworks
                 .Where(a => a.ArtistId == id)

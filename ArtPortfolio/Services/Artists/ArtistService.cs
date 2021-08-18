@@ -25,6 +25,12 @@ namespace ArtPortfolio.Services.Artists
         }
 
 
+        public bool IsArtist(int id)
+        {
+            return _data.Artists.Any(a => a.Id == id);
+        }
+
+
         public int GetIdByUser(string id)
         {
             return _data.Artists.Where(a => a.UserId == id).Select(a => a.Id).FirstOrDefault();

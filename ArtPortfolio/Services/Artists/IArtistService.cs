@@ -7,6 +7,8 @@ namespace ArtPortfolio.Services.Artists
     {
         bool IsArtist(string id);
 
+        bool IsArtist(int id);
+
         int GetIdByUser(string id);
 
         string GetName(int id);
